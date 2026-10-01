@@ -64,12 +64,25 @@ input.grow{flex:1;min-width:0}
 .hist{color:var(--mut);font-size:14px;padding:4px 0;border-bottom:1px solid var(--bd)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:9}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.gear{border:1px solid var(--bd);background:var(--card);color:var(--tx);width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.ov.on{display:flex}
+.pn{background:var(--card);color:var(--tx);border-radius:16px;padding:20px;width:100%;max-width:380px;max-height:90vh;overflow:auto}
+.pn h2{margin:0;font-size:17px}
+.pn h3{font-size:13px;color:var(--mut);margin:18px 0 8px;font-weight:500}
+.seg{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:14px;padding:8px 4px;border-radius:8px;cursor:pointer}
+.seg button.on{background:var(--tx);color:var(--bg);font-weight:700}
+.sw{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sw>button:not(.btn){width:32px;height:32px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}
+.sw>button.on{border-color:var(--tx)}
+.sw input{width:40px;height:32px;padding:0;border:0;background:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header><h1>Planner Xu</h1><div class="purse" id="purse"><i>$</i><span id="coins">0</span></div></header>
+  <header><h1>Planner Xu</h1><div class="row"><button class="gear" id="gear" aria-label="Settings">⚙︎</button><div class="purse" id="purse"><i>$</i><span id="coins">0</span></div></div></header>
   <nav id="nav">
     <button data-t="today" class="on">Hôm nay</button>
     <button data-t="week">Tuần</button>
@@ -124,12 +137,18 @@ input.grow{flex:1;min-width:0}
     <div id="hist"></div>
   </section>
 </div>
+<div class="ov" id="ov"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="justify-content:space-between"><h2 data-i="settings"></h2><button class="x" id="cls" aria-label="Close">×</button></div>
+  <h3 data-i="lang"></h3><div class="seg" id="sl"><button data-v="vi">Tiếng Việt</button><button data-v="en">English</button></div>
+  <h3 data-i="theme"></h3><div class="seg" id="st"><button data-v="auto" data-i="auto"></button><button data-v="light" data-i="light"></button><button data-v="dark" data-i="dark"></button></div>
+  <h3 data-i="bg"></h3><div class="sw" id="sw"></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
 const $=s=>document.querySelector(s);
 const KEY='planner-xu-v1';
-let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{}};
+let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{},set:{lang:'vi',theme:'auto',bg:''}};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 const pad=n=>String(n).padStart(2,'0');
@@ -137,7 +156,7 @@ const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
 const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
 const mon=d=>addDays(d,-((d.getDay()+6)%7));
-const DOW=['CN','T2','T3','T4','T5','T6','T7'];
+const DOWS={vi:['CN','T2','T3','T4','T5','T6','T7'],en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat']};
 let sel=ymd(new Date()), wk=mon(new Date());
 const todayStr=()=>ymd(new Date());
 const uid=()=>Date.now()+Math.floor(Math.random()*1000);
@@ -151,12 +170,12 @@ function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=
 
 function renderToday(){
   const d=parse(sel);
-  $('#dlabel').textContent=(sel===todayStr()?'Hôm nay, ':DOW[d.getDay()]+', ')+pad(d.getDate())+'/'+pad(d.getMonth()+1);
+  $('#dlabel').textContent=(sel===todayStr()?tr('todayC'):DOWS[S.set.lang][d.getDay()]+', ')+pad(d.getDate())+'/'+pad(d.getMonth()+1);
   const ts=S.tasks.filter(t=>t.date===sel);
   const done=ts.filter(t=>t.done).length;
   $('#pb').style.width=(ts.length?done/ts.length*100:0)+'%';
   const L=$('#list');L.innerHTML='';
-  if(!ts.length){L.append(el('div','empty','Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.'));return;}
+  if(!ts.length){L.append(el('div','empty',tr('emptyT')));return;}
   ts.forEach(t=>{
     const r=el('div','task'+(t.done?' done':''));
     const c=el('button','ck',t.done?'✓':'');c.setAttribute('aria-label','Hoàn thành');c.onclick=()=>toggle(t.id);
@@ -167,7 +186,7 @@ function renderToday(){
 function toggle(id){
   const t=S.tasks.find(k=>k.id===id);if(!t)return;
   t.done=!t.done;
-  if(t.done){earn(t.reward);toast('+'+t.reward+' xu! Làm tốt lắm');}else earn(-t.reward);
+  if(t.done){earn(t.reward);toast(tr('earned',t.reward));}else earn(-t.reward);
   save();render();
 }
 function addTask(){
@@ -188,10 +207,10 @@ function renderWeek(){
   for(let i=0;i<7;i++){
     const d=addDays(wk,i),k=ymd(d),ts=S.tasks.filter(t=>t.date===k);
     const b=el('button','day'+(k===todayStr()?' today':''));
-    b.append(el('h3','',DOW[d.getDay()]),el('small','',pad(d.getDate())+'/'+pad(d.getMonth()+1)));
-    if(ts.length)b.append(el('div','cnt',ts.filter(t=>t.done).length+'/'+ts.length+' xong'));
+    b.append(el('h3','',DOWS[S.set.lang][d.getDay()]),el('small','',pad(d.getDate())+'/'+pad(d.getMonth()+1)));
+    if(ts.length)b.append(el('div','cnt',ts.filter(t=>t.done).length+'/'+ts.length+' '+tr('done')));
     ts.slice(0,5).forEach(t=>b.append(el('div','mt'+(t.done?' d':''),t.text)));
-    if(ts.length>5)b.append(el('div','mt','+'+(ts.length-5)+' việc nữa'));
+    if(ts.length>5)b.append(el('div','mt','+'+(ts.length-5)+' '+tr('more')));
     b.onclick=()=>{sel=k;tab('today');};
     G.append(b);
   }
@@ -204,14 +223,14 @@ const P={mode:'focus',left:25*60,run:false,end:0,h:null};
 const dur=m=>(m==='focus'?25:5)*60;
 function drawP(){
   $('#ptime').textContent=pad(Math.floor(P.left/60))+':'+pad(P.left%60);
-  $('#pmode').textContent=P.mode==='focus'?'Tập trung':'Nghỉ ngắn';
-  $('#pgo').textContent=P.run?'Tạm dừng':'Bắt đầu';
-  $('#pcount').textContent=S.pomos[todayStr()]||0;
+  $('#pmode').textContent=P.mode==='focus'?tr('focus'):tr('brk');
+  $('#pgo').textContent=P.run?tr('pause'):tr('start');
+  $('.pomo p.m').innerHTML=tr('pnote1')+'<b>'+(S.pomos[todayStr()]||0)+'</b>'+tr('pnote2');
   document.title=P.run?$('#ptime').textContent+' – Planner Xu':'Planner Xu';
 }
 function fillPTask(){
   const s=$('#ptask'),cur=s.value;s.innerHTML='';
-  const o=el('option','','Không chọn việc');o.value='';s.append(o);
+  const o=el('option','',tr('noTask'));o.value='';s.append(o);
   S.tasks.filter(t=>t.date===todayStr()&&!t.done).forEach(t=>{const x=el('option','',t.text);x.value=t.id;s.append(x);});
   s.value=cur;
 }
@@ -219,8 +238,8 @@ function tick(){
   P.left=Math.max(0,Math.round((P.end-Date.now())/1000));
   if(P.left<=0){
     clearInterval(P.h);P.run=false;
-    if(P.mode==='focus'){S.pomos[todayStr()]=(S.pomos[todayStr()]||0)+1;earn(5);save();toast('Xong phiên! +5 xu. Nghỉ chút nhé');P.mode='break';}
-    else{toast('Hết giờ nghỉ, vào việc thôi');P.mode='focus';}
+    if(P.mode==='focus'){S.pomos[todayStr()]=(S.pomos[todayStr()]||0)+1;earn(5);save();toast(tr('pomoDone'));P.mode='break';}
+    else{toast(tr('breakDone'));P.mode='focus';}
     P.left=dur(P.mode);renderHead();
   }
   drawP();
@@ -241,25 +260,65 @@ function renderShop(){
     const top=el('div','row');top.style.justifyContent='space-between';
     const x=el('button','x','×');x.setAttribute('aria-label','Xóa quà');x.onclick=()=>{S.shop=S.shop.filter(k=>k.id!==it.id);save();render();};
     top.append(el('b','',it.name),x);
-    const buy=el('button','btn pri','Đổi · '+it.price+' xu');buy.disabled=S.coins<it.price;
-    buy.onclick=()=>{if(S.coins<it.price)return;earn(-it.price);S.bought.unshift({name:it.name,price:it.price,at:new Date().toISOString()});save();toast('Đã đổi: '+it.name);render();};
+    const buy=el('button','btn pri',tr('buy',it.price));buy.disabled=S.coins<it.price;
+    buy.onclick=()=>{if(S.coins<it.price)return;earn(-it.price);S.bought.unshift({name:it.name,price:it.price,at:new Date().toISOString()});save();toast(tr('bought')+it.name);render();};
     c.append(top,buy);G.append(c);
   });
-  if(!S.shop.length)G.append(el('div','empty','Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.'));
+  if(!S.shop.length)G.append(el('div','empty',tr('emptyS')));
   const H=$('#hist');H.innerHTML='';
-  if(!S.bought.length)H.append(el('div','hist','Chưa đổi món nào.'));
-  S.bought.slice(0,20).forEach(b=>{const d=new Date(b.at);H.append(el('div','hist',pad(d.getDate())+'/'+pad(d.getMonth()+1)+' – '+b.name+' (−'+b.price+' xu)'));});
+  if(!S.bought.length)H.append(el('div','hist',tr('emptyH')));
+  S.bought.slice(0,20).forEach(b=>{const d=new Date(b.at);H.append(el('div','hist',pad(d.getDate())+'/'+pad(d.getMonth()+1)+' – '+b.name+' (−'+b.price+' '+tr('unit')+')'));});
 }
 function addShop(){
   const n=$('#sn').value.trim(),p=Math.floor(+$('#sp').value);
-  if(!n||!(p>0)){toast('Nhập tên quà và giá lớn hơn 0');return;}
+  if(!n||!(p>0)){toast(tr('needSh'));return;}
   S.shop.push({id:uid(),name:n,price:p});$('#sn').value='';$('#sp').value='';save();render();
 }
 $('#adds').onclick=addShop;
 
 function renderHead(){$('#coins').textContent=S.coins;}
 function render(){renderHead();renderToday();renderWeek();renderShop();fillPTask();drawP();}
-render();
+
+/* Settings + i18n */
+const T={vi:{today:'Hôm nay',week:'Tuần',shop:'Cửa hàng',todayC:'Hôm nay, ',addTask:'Thêm việc',reset:'Đặt lại',skip:'Bỏ qua',addReward:'Thêm quà',redeemed:'Đã đổi',phNt:'Việc cần làm...',phSn:'Phần thưởng muốn đổi (vd: trà sữa)',phSp:'Giá (xu)',unit:'xu',emptyT:'Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.',earned:'+{0} xu! Làm tốt lắm',noTask:'Không chọn việc',focus:'Tập trung',brk:'Nghỉ ngắn',pause:'Tạm dừng',start:'Bắt đầu',pomoDone:'Xong phiên! +5 xu. Nghỉ chút nhé',breakDone:'Hết giờ nghỉ, vào việc thôi',buy:'Đổi · {0} xu',bought:'Đã đổi: ',emptyS:'Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.',emptyH:'Chưa đổi món nào.',needSh:'Nhập tên quà và giá lớn hơn 0',done:'xong',more:'việc nữa',pnote1:'Mỗi phiên tập trung 25 phút xong nhận +5 xu. Hôm nay: ',pnote2:' phiên.',settings:'Cài đặt',lang:'Ngôn ngữ',theme:'Chế độ',auto:'Tự động',light:'Sáng',dark:'Tối',bg:'Màu nền',reset2:'Mặc định'},
+en:{today:'Today',week:'Week',shop:'Shop',todayC:'Today, ',addTask:'Add task',reset:'Reset',skip:'Skip',addReward:'Add reward',redeemed:'Redeemed',phNt:'What needs doing...',phSn:'Reward you want (e.g. bubble tea)',phSp:'Price (coins)',unit:'coins',emptyT:'No tasks yet. Add your first one to start earning coins.',earned:'+{0} coins! Nice work',noTask:'No task selected',focus:'Focus',brk:'Short break',pause:'Pause',start:'Start',pomoDone:'Session done! +5 coins. Take a break',breakDone:'Break over, back to it',buy:'Redeem · {0} coins',bought:'Redeemed: ',emptyS:'No rewards yet. Add something to treat yourself with.',emptyH:'Nothing redeemed yet.',needSh:'Enter a reward name and a price above 0',done:'done',more:'more',pnote1:'Each 25-minute focus session earns +5 coins. Today: ',pnote2:' sessions.',settings:'Settings',lang:'Language',theme:'Mode',auto:'Auto',light:'Light',dark:'Dark',bg:'Background color',reset2:'Default'}};
+const tr=(k,a)=>(T[S.set.lang][k]||k).replace('{0}',a);
+const MAP={'[data-t=today]':'today','[data-t=week]':'week','[data-t=shop]':'shop','#td':'today','#addt':'addTask','#prs':'reset','#psk':'skip','#adds':'addReward','#shop h2':'redeemed'};
+const SW=['#f2f5fa','#fdf1e3','#e8f5ea','#f1ecfb','#0f1520','#1f1b18','#10231d'];
+function applySet(){
+  const st=S.set,r=document.documentElement;
+  r.lang=st.lang;
+  if(st.theme==='auto')r.removeAttribute('data-theme');else r.dataset.theme=st.theme;
+  ['--bg','--tx','--mut','--card','--bd'].forEach(k=>r.style.removeProperty(k));
+  if(/^#[0-9a-f]{6}$/i.test(st.bg)){
+    const c=parseInt(st.bg.slice(1),16),L=(0.299*(c>>16)+0.587*((c>>8)&255)+0.114*(c&255))/255,lt=L>.55;
+    const v={'--bg':st.bg,'--tx':lt?'#14213d':'#eef2fb','--mut':lt?'#5f697d':'#a8b0c4','--card':lt?'#ffffff':'color-mix(in srgb,'+st.bg+' 82%,#fff)','--bd':'color-mix(in srgb,'+st.bg+(lt?' 85%,#000)':' 75%,#fff)')};
+    for(const k in v)r.style.setProperty(k,v[k]);
+  }
+  for(const q in MAP)$(q).textContent=tr(MAP[q]);
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=tr(e.dataset.i));
+  $('#nt').placeholder=tr('phNt');$('#sn').placeholder=tr('phSn');$('#sp').placeholder=tr('phSp');
+  [...$('#nr').options].forEach(o=>o.textContent='+'+o.value+' '+tr('unit'));
+}
+function drawSet(){
+  const st=S.set;
+  document.querySelectorAll('#sl button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.lang));
+  document.querySelectorAll('#st button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.theme&&!st.bg));
+  const w=$('#sw');w.innerHTML='';
+  SW.forEach(c=>{const b=el('button',st.bg===c?'on':'');b.style.background=c;b.setAttribute('aria-label',c);b.onclick=()=>commit(()=>{st.bg=c;});w.append(b);});
+  const i=document.createElement('input');i.type='color';i.value=st.bg||'#f2f5fa';
+  i.oninput=()=>{st.bg=i.value;applySet();save();};
+  const r=el('button','btn',tr('reset2'));r.onclick=()=>commit(()=>{st.bg='';});
+  w.append(i,r);
+}
+function commit(fn){fn();applySet();save();drawSet();render();}
+$('#sl').onclick=e=>{const v=e.target.dataset.v;if(v)commit(()=>{S.set.lang=v;});};
+$('#st').onclick=e=>{const v=e.target.dataset.v;if(v)commit(()=>{S.set.theme=v;S.set.bg='';});};
+$('#gear').onclick=()=>{drawSet();$('#ov').classList.add('on');};
+$('#cls').onclick=()=>$('#ov').classList.remove('on');
+$('#ov').onclick=e=>{if(e.target.id==='ov')$('#ov').classList.remove('on');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#ov').classList.remove('on');});
+applySet();render();
 </script>
 </body>
 </html>
