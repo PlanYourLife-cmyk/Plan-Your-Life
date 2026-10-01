@@ -77,6 +77,27 @@ input.grow{flex:1;min-width:0}
 .sw>button:not(.btn){width:32px;height:32px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}
 .sw>button.on{border-color:var(--tx)}
 .sw input{width:40px;height:32px;padding:0;border:0;background:none}
+nav button{padding-left:2px;padding-right:2px}
+.day{position:relative}
+.stamp{position:absolute;right:6px;top:6px;width:48px;height:48px;border:2px solid var(--red);color:var(--red);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:9px;font-weight:800;line-height:1.1;transform:rotate(-14deg);opacity:.85;pointer-events:none}
+.pg{position:relative;height:20px;background:var(--bd);border-radius:999px;overflow:hidden;min-width:80px}
+.pg b{position:absolute;left:0;top:0;bottom:0;background:var(--teal);opacity:.5}
+.pg span{position:relative;display:block;text-align:center;font-size:12px;font-weight:700;line-height:20px;white-space:nowrap;padding:0 6px}
+#goal{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin-bottom:14px}
+#goal .pg{flex:1}
+.item .pg{width:100%}
+.fl{font-weight:800;color:#ff7a00;font-size:13px;flex:none}
+.flame{display:flex;flex-direction:column;align-items:center;min-width:42px;font-size:22px;line-height:1.1}
+.flame b{font-size:15px;font-weight:800;color:#ff7a00}
+.flame.off{filter:grayscale(1);opacity:.5}
+.dots{display:flex;gap:4px;margin-top:5px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--bd)}
+.dots i.on{background:#ff7a00}
+.badges{display:flex;gap:10px;flex-wrap:wrap}
+.bdg{flex:1;min-width:90px;text-align:center;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 6px}
+.bdg .ic{font-size:36px}
+.bdg small{display:block;color:var(--mut)}
+.bdg.lock{opacity:.4;filter:grayscale(1)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -88,7 +109,9 @@ input.grow{flex:1;min-width:0}
     <button data-t="week">Tuần</button>
     <button data-t="pomo">Pomodoro</button>
     <button data-t="shop">Cửa hàng</button>
+    <button data-t="habits">Thói quen</button>
   </nav>
+  <div id="goal"></div>
 
   <section id="today" class="on">
     <div class="row bar">
@@ -129,12 +152,20 @@ input.grow{flex:1;min-width:0}
   <section id="shop">
     <div class="row add">
       <input class="grow" id="sn" placeholder="Phần thưởng muốn đổi (vd: trà sữa)" maxlength="60">
-      <input id="sp" type="number" min="1" placeholder="Giá (xu)" style="width:110px">
+      <input id="sp" type="number" min="1" style="width:100px"><select id="sh"></select><input id="sd" type="number" min="1" style="width:90px">
       <button class="btn pri" id="adds">Thêm quà</button>
     </div>
+    <div class="row bar"><button class="btn" id="sortb"></button></div>
     <div class="shop" id="items"></div>
     <h2 style="font-size:16px">Đã đổi</h2>
     <div id="hist"></div>
+  </section>
+
+  <section id="habits">
+    <div class="row add"><input class="grow" id="hn" maxlength="60"><button class="btn pri" id="addh"></button></div>
+    <div id="hl"></div>
+    <h2 style="font-size:16px;margin-top:22px" data-i="badgesT"></h2>
+    <div class="badges" id="bd"></div>
   </section>
 </div>
 <div class="ov" id="ov"><div class="pn" role="dialog" aria-modal="true">
@@ -148,7 +179,7 @@ input.grow{flex:1;min-width:0}
 <script>
 const $=s=>document.querySelector(s);
 const KEY='planner-xu-v1';
-let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{},set:{lang:'vi',theme:'auto',bg:''}};
+let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{},set:{lang:'vi',theme:'auto',bg:''},habits:[],badges:{},pin:0,sort:'asc'};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 const pad=n=>String(n).padStart(2,'0');
@@ -162,7 +193,7 @@ const todayStr=()=>ymd(new Date());
 const uid=()=>Date.now()+Math.floor(Math.random()*1000);
 
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1800);}
-function earn(n){S.coins=Math.max(0,S.coins+n);const p=$('#purse');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop');}
+function earn(n){S.coins+=n;const p=$('#purse');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop');}
 function tab(t){document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));render();}
 $('#nav').onclick=e=>{if(e.target.dataset.t)tab(e.target.dataset.t);};
 
@@ -175,7 +206,9 @@ function renderToday(){
   const done=ts.filter(t=>t.done).length;
   $('#pb').style.width=(ts.length?done/ts.length*100:0)+'%';
   const L=$('#list');L.innerHTML='';
-  if(!ts.length){L.append(el('div','empty',tr('emptyT')));return;}
+  const hs=sel===todayStr()?S.habits:[];
+  hs.forEach(h=>{const dn=!!h.log[sel],r=el('div','task'+(dn?' done':'')),c=el('button','ck',dn?'✓':'');c.onclick=()=>tickHabit(h.id);r.append(c,el('div','tx',h.name),el('span','fl','🔥 '+streakOf(h)));L.append(r);});
+  if(!ts.length&&!hs.length){L.append(el('div','empty',tr('emptyT')));return;}
   ts.forEach(t=>{
     const r=el('div','task'+(t.done?' done':''));
     const c=el('button','ck',t.done?'✓':'');c.setAttribute('aria-label','Hoàn thành');c.onclick=()=>toggle(t.id);
@@ -208,6 +241,7 @@ function renderWeek(){
     const d=addDays(wk,i),k=ymd(d),ts=S.tasks.filter(t=>t.date===k);
     const b=el('button','day'+(k===todayStr()?' today':''));
     b.append(el('h3','',DOWS[S.set.lang][d.getDay()]),el('small','',pad(d.getDate())+'/'+pad(d.getMonth()+1)));
+    if(ts.length&&ts.every(t=>t.done)&&S.habits.filter(h=>h.created<=k).every(h=>h.log[k]))b.append(el('div','stamp',tr('perfect')));
     if(ts.length)b.append(el('div','cnt',ts.filter(t=>t.done).length+'/'+ts.length+' '+tr('done')));
     ts.slice(0,5).forEach(t=>b.append(el('div','mt'+(t.done?' d':''),t.text)));
     if(ts.length>5)b.append(el('div','mt','+'+(ts.length-5)+' '+tr('more')));
@@ -253,37 +287,77 @@ $('#prs').onclick=()=>{clearInterval(P.h);P.run=false;P.left=dur(P.mode);drawP()
 $('#psk').onclick=()=>{clearInterval(P.h);P.run=false;P.mode=P.mode==='focus'?'break':'focus';P.left=dur(P.mode);drawP();};
 
 /* Shop */
+const BADGES=[{id:'bronze',days:3,ic:'🥉'},{id:'silver',days:7,ic:'🥈'},{id:'gold',days:21,ic:'🥇'}];
+const hab=id=>S.habits.find(h=>h.id===id);
+function streakOf(h){let d=new Date(),n=0;if(!h.log[ymd(d)])d=addDays(d,-1);while(h.log[ymd(d)]){n++;d=addDays(d,-1);}return n;}
+function pgBar(c,m,txt){const w=el('div','pg'),f=el('b');f.style.width=Math.min(100,Math.max(0,c)/m*100)+'%';w.append(f,el('span','',txt));return w;}
+function fillHSel(){const s=$('#sh'),c=s.value;s.innerHTML='';const o=el('option','',tr('noHabit'));o.value='';s.append(o);S.habits.forEach(h=>{const x=el('option','',h.name);x.value=h.id;s.append(x);});s.value=c;}
+function tickHabit(id){const h=hab(id),k=todayStr();if(h.log[k])delete h.log[k];else h.log[k]=1;
+  const best=Math.max(0,...S.habits.map(streakOf));
+  BADGES.forEach(b=>{if(best>=b.days&&!S.badges[b.id]){S.badges[b.id]=k;toast(tr('badgeGot',tr(b.id)));}});
+  save();render();}
+function addHabit(){const v=$('#hn').value.trim();if(!v)return;S.habits.push({id:uid(),name:v,created:todayStr(),log:{}});$('#hn').value='';save();render();}
+$('#addh').onclick=addHabit;$('#hn').onkeydown=e=>{if(e.key==='Enter')addHabit();};
+function renderHabits(){
+  const L=$('#hl');L.innerHTML='';
+  if(!S.habits.length)L.append(el('div','empty',tr('emptyH2')));
+  S.habits.forEach(h=>{
+    const n=streakOf(h),dn=!!h.log[todayStr()],r=el('div','task'+(dn?' done':''));
+    const c=el('button','ck',dn?'✓':'');c.onclick=()=>tickHabit(h.id);
+    const f=el('div','flame'+(n?'':' off'));f.append(el('span','','🔥'),el('b','',n));
+    const m=el('div','tx');m.append(el('div','',h.name));
+    const dt=el('div','dots');for(let i=6;i>=0;i--)dt.append(el('i',h.log[ymd(addDays(new Date(),-i))]?'on':''));m.append(dt);
+    const x=el('button','x','×');x.setAttribute('aria-label','Delete');x.onclick=()=>{S.habits=S.habits.filter(k=>k.id!==h.id);save();render();};
+    r.append(c,f,m,x);L.append(r);
+  });
+  const B=$('#bd');B.innerHTML='';
+  BADGES.forEach(b=>{const d=el('div','bdg'+(S.badges[b.id]?'':' lock'));d.append(el('div','ic',b.ic),el('b','',tr(b.id)),el('small','',b.days+' '+tr('days')));B.append(d);});
+}
+function renderGoal(){
+  const g=$('#goal'),it=S.shop.find(k=>k.id===S.pin);g.innerHTML='';g.style.display=it?'':'none';if(!it)return;
+  const h=it.habit?hab(it.habit):null,co=Math.max(0,S.coins);
+  g.append(el('b','','🎯 '+it.name));
+  if(it.price>0)g.append(pgBar(co,it.price,co+'/'+it.price));
+  if(it.habit)g.append(pgBar(h?streakOf(h):0,it.days,'🔥 '+(h?streakOf(h):0)+'/'+it.days));
+}
 function renderShop(){
   const G=$('#items');G.innerHTML='';
-  S.shop.forEach(it=>{
-    const c=el('div','item');
-    const top=el('div','row');top.style.justifyContent='space-between';
-    const x=el('button','x','×');x.setAttribute('aria-label','Xóa quà');x.onclick=()=>{S.shop=S.shop.filter(k=>k.id!==it.id);save();render();};
-    top.append(el('b','',it.name),x);
-    const buy=el('button','btn pri',tr('buy',it.price));buy.disabled=S.coins<it.price;
-    buy.onclick=()=>{if(S.coins<it.price)return;earn(-it.price);S.bought.unshift({name:it.name,price:it.price,at:new Date().toISOString()});save();toast(tr('bought')+it.name);render();};
-    c.append(top,buy);G.append(c);
+  const dir=S.sort==='desc'?-1:1,co=Math.max(0,S.coins);
+  $('#sortb').textContent=tr(S.sort==='desc'?'sortD':'sortA');
+  [...S.shop].sort((a,b)=>dir*((a.price-b.price)||((a.days||0)-(b.days||0)))).forEach(it=>{
+    const h=it.habit?hab(it.habit):null,sk=h?streakOf(h):0;
+    const ok=S.coins>=it.price&&(!it.habit||(h&&sk>=it.days));
+    const c=el('div','item'),top=el('div','row'),act=el('div','row');top.style.justifyContent='space-between';
+    const pin=el('button','x',S.pin===it.id?'★':'☆');pin.setAttribute('aria-label','Pin');pin.onclick=()=>{S.pin=S.pin===it.id?0:it.id;save();render();};
+    const x=el('button','x','×');x.setAttribute('aria-label','Delete');x.onclick=()=>{S.shop=S.shop.filter(k=>k.id!==it.id);if(S.pin===it.id)S.pin=0;save();render();};
+    act.append(pin,x);top.append(el('b','',it.name),act);c.append(top);
+    if(it.price>0)c.append(pgBar(co,it.price,co+'/'+it.price+' '+tr('unit')));
+    if(it.habit)c.append(pgBar(sk,it.days,'🔥 '+(h?h.name+' ':'')+sk+'/'+it.days+' '+tr('days')));
+    const buy=el('button','btn pri',it.price>0?tr('buy',it.price):tr('redeem'));buy.disabled=!ok;
+    buy.onclick=()=>{if(!ok)return;if(it.price)earn(-it.price);S.bought.unshift({name:it.name,price:it.price,at:new Date().toISOString()});save();toast(tr('bought')+it.name);render();};
+    c.append(buy);G.append(c);
   });
   if(!S.shop.length)G.append(el('div','empty',tr('emptyS')));
   const H=$('#hist');H.innerHTML='';
   if(!S.bought.length)H.append(el('div','hist',tr('emptyH')));
-  S.bought.slice(0,20).forEach(b=>{const d=new Date(b.at);H.append(el('div','hist',pad(d.getDate())+'/'+pad(d.getMonth()+1)+' – '+b.name+' (−'+b.price+' '+tr('unit')+')'));});
+  S.bought.slice(0,20).forEach(b=>{const d=new Date(b.at);H.append(el('div','hist',pad(d.getDate())+'/'+pad(d.getMonth()+1)+' – '+b.name+(b.price?' (−'+b.price+' '+tr('unit')+')':'')));});
 }
+$('#sortb').onclick=()=>{S.sort=S.sort==='desc'?'asc':'desc';save();render();};
 function addShop(){
-  const n=$('#sn').value.trim(),p=Math.floor(+$('#sp').value);
-  if(!n||!(p>0)){toast(tr('needSh'));return;}
-  S.shop.push({id:uid(),name:n,price:p});$('#sn').value='';$('#sp').value='';save();render();
+  const n=$('#sn').value.trim(),p=Math.max(0,Math.floor(+$('#sp').value||0)),h=+$('#sh').value||0,dd=Math.floor(+$('#sd').value||0),hb=h&&dd>0;
+  if(!n||(!(p>0)&&!hb)){toast(tr('needSh'));return;}
+  S.shop.push({id:uid(),name:n,price:p,habit:hb?h:0,days:hb?dd:0});$('#sn').value='';$('#sp').value='';$('#sd').value='';save();render();
 }
 $('#adds').onclick=addShop;
 
 function renderHead(){$('#coins').textContent=S.coins;}
-function render(){renderHead();renderToday();renderWeek();renderShop();fillPTask();drawP();}
+function render(){renderHead();renderToday();renderWeek();renderShop();renderHabits();renderGoal();fillHSel();fillPTask();drawP();}
 
 /* Settings + i18n */
-const T={vi:{today:'Hôm nay',week:'Tuần',shop:'Cửa hàng',todayC:'Hôm nay, ',addTask:'Thêm việc',reset:'Đặt lại',skip:'Bỏ qua',addReward:'Thêm quà',redeemed:'Đã đổi',phNt:'Việc cần làm...',phSn:'Phần thưởng muốn đổi (vd: trà sữa)',phSp:'Giá (xu)',unit:'xu',emptyT:'Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.',earned:'+{0} xu! Làm tốt lắm',noTask:'Không chọn việc',focus:'Tập trung',brk:'Nghỉ ngắn',pause:'Tạm dừng',start:'Bắt đầu',pomoDone:'Xong phiên! +5 xu. Nghỉ chút nhé',breakDone:'Hết giờ nghỉ, vào việc thôi',buy:'Đổi · {0} xu',bought:'Đã đổi: ',emptyS:'Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.',emptyH:'Chưa đổi món nào.',needSh:'Nhập tên quà và giá lớn hơn 0',done:'xong',more:'việc nữa',pnote1:'Mỗi phiên tập trung 25 phút xong nhận +5 xu. Hôm nay: ',pnote2:' phiên.',settings:'Cài đặt',lang:'Ngôn ngữ',theme:'Chế độ',auto:'Tự động',light:'Sáng',dark:'Tối',bg:'Màu nền',reset2:'Mặc định'},
-en:{today:'Today',week:'Week',shop:'Shop',todayC:'Today, ',addTask:'Add task',reset:'Reset',skip:'Skip',addReward:'Add reward',redeemed:'Redeemed',phNt:'What needs doing...',phSn:'Reward you want (e.g. bubble tea)',phSp:'Price (coins)',unit:'coins',emptyT:'No tasks yet. Add your first one to start earning coins.',earned:'+{0} coins! Nice work',noTask:'No task selected',focus:'Focus',brk:'Short break',pause:'Pause',start:'Start',pomoDone:'Session done! +5 coins. Take a break',breakDone:'Break over, back to it',buy:'Redeem · {0} coins',bought:'Redeemed: ',emptyS:'No rewards yet. Add something to treat yourself with.',emptyH:'Nothing redeemed yet.',needSh:'Enter a reward name and a price above 0',done:'done',more:'more',pnote1:'Each 25-minute focus session earns +5 coins. Today: ',pnote2:' sessions.',settings:'Settings',lang:'Language',theme:'Mode',auto:'Auto',light:'Light',dark:'Dark',bg:'Background color',reset2:'Default'}};
+const T={vi:{today:'Hôm nay',week:'Tuần',shop:'Cửa hàng',todayC:'Hôm nay, ',addTask:'Thêm việc',reset:'Đặt lại',skip:'Bỏ qua',addReward:'Thêm quà',redeemed:'Đã đổi',phNt:'Việc cần làm...',phSn:'Phần thưởng muốn đổi (vd: trà sữa)',phSp:'Giá (xu)',unit:'xu',emptyT:'Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.',earned:'+{0} xu! Làm tốt lắm',noTask:'Không chọn việc',focus:'Tập trung',brk:'Nghỉ ngắn',pause:'Tạm dừng',start:'Bắt đầu',pomoDone:'Xong phiên! +5 xu. Nghỉ chút nhé',breakDone:'Hết giờ nghỉ, vào việc thôi',buy:'Đổi · {0} xu',bought:'Đã đổi: ',emptyS:'Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.',emptyH:'Chưa đổi món nào.',needSh:'Nhập tên quà, kèm giá hoặc thói quen và số ngày',done:'xong',more:'việc nữa',pnote1:'Mỗi phiên tập trung 25 phút xong nhận +5 xu. Hôm nay: ',pnote2:' phiên.',settings:'Cài đặt',lang:'Ngôn ngữ',theme:'Chế độ',auto:'Tự động',light:'Sáng',dark:'Tối',bg:'Màu nền',reset2:'Mặc định',habits:'Thói quen',addHabit:'Thêm thói quen',phHb:'Thói quen mới (vd: đọc sách 20 phút)',days:'ngày',badgesT:'Huy hiệu',bronze:'Đồng',silver:'Bạc',gold:'Vàng',badgeGot:'Huy hiệu {0}!',perfect:'HOÀN HẢO',sortA:'Giá tăng dần ↑',sortD:'Giá giảm dần ↓',noHabit:'Không cần thói quen',redeem:'Đổi',emptyH2:'Chưa có thói quen. Thêm một thói quen để bắt đầu chuỗi ngày.'},
+en:{today:'Today',week:'Week',shop:'Shop',todayC:'Today, ',addTask:'Add task',reset:'Reset',skip:'Skip',addReward:'Add reward',redeemed:'Redeemed',phNt:'What needs doing...',phSn:'Reward you want (e.g. bubble tea)',phSp:'Price (coins)',unit:'coins',emptyT:'No tasks yet. Add your first one to start earning coins.',earned:'+{0} coins! Nice work',noTask:'No task selected',focus:'Focus',brk:'Short break',pause:'Pause',start:'Start',pomoDone:'Session done! +5 coins. Take a break',breakDone:'Break over, back to it',buy:'Redeem · {0} coins',bought:'Redeemed: ',emptyS:'No rewards yet. Add something to treat yourself with.',emptyH:'Nothing redeemed yet.',needSh:'Enter a name, plus a price or a habit and days',done:'done',more:'more',pnote1:'Each 25-minute focus session earns +5 coins. Today: ',pnote2:' sessions.',settings:'Settings',lang:'Language',theme:'Mode',auto:'Auto',light:'Light',dark:'Dark',bg:'Background color',reset2:'Default',habits:'Habits',addHabit:'Add habit',phHb:'New habit (e.g. read 20 min)',days:'days',badgesT:'Badges',bronze:'Bronze',silver:'Silver',gold:'Gold',badgeGot:'{0} badge unlocked!',perfect:'PERFECT',sortA:'Price: low to high ↑',sortD:'Price: high to low ↓',noHabit:'No habit required',redeem:'Redeem',emptyH2:'No habits yet. Add one to start a streak.'}};
 const tr=(k,a)=>(T[S.set.lang][k]||k).replace('{0}',a);
-const MAP={'[data-t=today]':'today','[data-t=week]':'week','[data-t=shop]':'shop','#td':'today','#addt':'addTask','#prs':'reset','#psk':'skip','#adds':'addReward','#shop h2':'redeemed'};
+const MAP={'[data-t=today]':'today','[data-t=week]':'week','[data-t=shop]':'shop','#td':'today','#addt':'addTask','#prs':'reset','#psk':'skip','#adds':'addReward','#shop h2':'redeemed','[data-t=habits]':'habits','#addh':'addHabit'};
 const SW=['#f2f5fa','#fdf1e3','#e8f5ea','#f1ecfb','#0f1520','#1f1b18','#10231d'];
 function applySet(){
   const st=S.set,r=document.documentElement;
@@ -297,7 +371,7 @@ function applySet(){
   }
   for(const q in MAP)$(q).textContent=tr(MAP[q]);
   document.querySelectorAll('[data-i]').forEach(e=>e.textContent=tr(e.dataset.i));
-  $('#nt').placeholder=tr('phNt');$('#sn').placeholder=tr('phSn');$('#sp').placeholder=tr('phSp');
+  $('#nt').placeholder=tr('phNt');$('#hn').placeholder=tr('phHb');$('#sd').placeholder=tr('days');$('#sn').placeholder=tr('phSn');$('#sp').placeholder=tr('phSp');
   [...$('#nr').options].forEach(o=>o.textContent='+'+o.value+' '+tr('unit'));
 }
 function drawSet(){
