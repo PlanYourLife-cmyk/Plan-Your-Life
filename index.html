@@ -26,14 +26,14 @@ h1{font-size:20px;margin:0;font-weight:800}
 .purse.pop{animation:pop .5s}
 @keyframes pop{40%{transform:scale(1.18)}}
 nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:16px}
-nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:500;font-size:14px;padding:9px 4px;border-radius:9px;cursor:pointer}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:500;font-size:12px;padding:9px 4px;border-radius:9px;cursor:pointer}
 nav button.on{background:var(--tx);color:var(--bg);font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 section{display:none}section.on{display:block}
 .row{display:flex;align-items:center;gap:8px}
 .bar{justify-content:space-between;margin-bottom:12px}
-.bar h2{margin:0;font-size:17px}
-.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:14px;padding:8px 12px;border-radius:9px;cursor:pointer}
+.bar h2{margin:0;font-size:12px}
+.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:12px;padding:8px 12px;border-radius:9px;cursor:pointer}
 .btn.pri{background:var(--teal);border-color:var(--teal);color:var(--on);font-weight:700}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 input,select{font:inherit;font-size:16px;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:9px;padding:9px 11px}
@@ -45,7 +45,7 @@ input.grow{flex:1;min-width:0}
 .task.done .ck{background:var(--teal);border-color:var(--teal)}
 .task .tx{flex:1;min-width:0;overflow-wrap:anywhere}
 .task.done .tx{text-decoration:line-through;color:var(--mut)}
-.rw{font-weight:700;font-size:13px;color:var(--goldtx);background:var(--gold);border-radius:999px;padding:2px 9px;flex:none}
+.rw{font-weight:700;font-size:12px;color:var(--goldtx);background:var(--gold);border-radius:999px;padding:2px 9px;flex:none}
 .task.done .rw{opacity:.45}
 .x{border:0;background:none;color:var(--mut);cursor:pointer;font-size:18px;padding:4px 6px}
 .empty{color:var(--mut);text-align:center;padding:28px 8px;border:1px dashed var(--bd);border-radius:12px}
@@ -53,7 +53,7 @@ input.grow{flex:1;min-width:0}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .day{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 8px;cursor:pointer;min-height:130px;min-width:0;text-align:left;font:inherit;color:inherit}
 .day.today{border:2px solid var(--teal)}
-.day h3{margin:0;font-size:13px}
+.day h3{margin:0;font-size:12px}
 .day small{color:var(--mut);display:block;margin-bottom:6px}
 .day .mt{font-size:12px;padding:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .day .mt.d{text-decoration:line-through;color:var(--mut)}
@@ -77,7 +77,7 @@ input.grow{flex:1;min-width:0}
 .pn h2{margin:0;font-size:17px}
 .pn h3{font-size:13px;color:var(--mut);margin:18px 0 8px;font-weight:500}
 .seg{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px}
-.seg button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:14px;padding:8px 4px;border-radius:8px;cursor:pointer}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:13px;padding:8px 4px;border-radius:8px;cursor:pointer}
 .seg button.on{background:var(--tx);color:var(--bg);font-weight:700}
 .sw{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .sw>button:not(.btn){width:32px;height:32px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}
@@ -88,13 +88,13 @@ nav button{padding-left:2px;padding-right:2px}
 .stamp{position:absolute;right:6px;top:6px;width:48px;height:48px;border:2px solid var(--red);color:var(--red);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:9px;font-weight:800;line-height:1.1;transform:rotate(-14deg);opacity:.85;pointer-events:none}
 .pg{position:relative;height:20px;background:var(--bd);border-radius:999px;overflow:hidden;min-width:80px}
 .pg b{position:absolute;left:0;top:0;bottom:0;background:var(--teal);opacity:.5}
-.pg span{position:relative;display:block;text-align:center;font-size:12px;font-weight:700;line-height:20px;white-space:nowrap;padding:0 6px}
+.pg span{position:relative;display:block;text-align:center;font-size:10px;font-weight:700;line-height:20px;white-space:nowrap;padding:0 6px}
 #goal{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin-bottom:14px}
 #goal .pg{flex:1}
 .item .pg{width:100%}
 .fl{font-weight:800;color:#ff7a00;font-size:13px;flex:none}
 .flame{display:flex;flex-direction:column;align-items:center;min-width:42px;font-size:22px;line-height:1.1}
-.flame b{font-size:15px;font-weight:800;color:#ff7a00}
+.flame b{font-size:13px;font-weight:800;color:#ff7a00}
 .flame.off{filter:grayscale(1);opacity:.5}
 .dots{display:flex;gap:4px;margin-top:5px}
 .dots i{width:10px;height:10px;border-radius:50%;background:var(--bd)}
