@@ -14,70 +14,89 @@
 <title>Plan Your Life</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
+/* ============================================================
+   CHỈNH CỠ CHỮ Ở ĐÂY
+   Toàn app chỉ dùng 3 cỡ chữ chính. Sửa số trước chữ "px" là
+   mọi chỗ cùng loại đổi theo. Đừng xóa dấu ":" và dấu ";".
+   ============================================================ */
+:root{
+  --cs-tieu-de:20px;      /* TIÊU ĐỀ: tên app, số xu, dòng ngày/tuần, tiêu đề các bảng, chữ "Đã đổi" */
+  --cs-noi-dung:15px;     /* NỘI DUNG: tên việc, tên thói quen, tên quà, chữ trên nút, ô nhập (ô nhập tối thiểu 16px để iPhone không tự zoom) */
+  --cs-phu:13px;          /* CHỮ PHỤ: tab, nhãn nhỏ, mô tả, ghi chú, nhãn thưởng +10, tên thứ, chữ trên thanh tiến độ */
+
+  /* Cỡ đặc biệt (biểu tượng, đồng hồ) */
+  --cs-icon:20px;         /* Biểu tượng: nút ⚙︎ 🏅, dấu ×, ngọn lửa 🔥, tay kéo ⠿ */
+  --cs-huy-hieu:36px;     /* Biểu tượng huy hiệu */
+  --cs-dong-ho:72px;      /* Đồng hồ Pomodoro */
+  --cs-dau-moc:9px;       /* Chữ trong dấu mộc "HOÀN HẢO" */
+  --cs-dau-moc-rong:48px; /* Độ rộng dấu mộc (tăng lên nếu chữ mộc to hơn) */
+}
+/* ============================ HẾT PHẦN CHỈNH CỠ CHỮ ============================ */
+
 :root{--bg:#f2f5fa;--card:#fff;--tx:#14213d;--mut:#6b7488;--bd:#e1e6ef;--gold:#f5b301;--goldtx:#14213d;--teal:#346fb8;--on:#fff;--tealbg:#e1f4f2;--red:#d6455d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{min-height:100vh}
-.wrap{max-width:860px;margin:0 auto;padding:16px 16px 40px}
+.wrap{max-width:860px;margin:0 auto;padding:16px 16px 110px}
 header{flex-wrap:wrap;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-h1{font-size:20px;margin:0;font-weight:800}
-.purse{display:flex;align-items:center;gap:8px;background:var(--gold);color:var(--goldtx);padding:8px 16px 8px 8px;border-radius:999px;font-weight:800;font-size:20px}
-.purse i{width:28px;height:28px;border-radius:50%;background:var(--goldtx);color:var(--gold);display:grid;place-items:center;font-style:normal;font-size:14px}
+h1{font-size:var(--cs-tieu-de);margin:0;font-weight:800}
+.purse{display:flex;align-items:center;gap:8px;background:var(--gold);color:var(--goldtx);padding:8px 16px 8px 8px;border-radius:999px;font-weight:800;font-size:var(--cs-tieu-de)}
+.purse i{width:28px;height:28px;border-radius:50%;background:var(--goldtx);color:var(--gold);display:grid;place-items:center;font-style:normal;font-size:var(--cs-phu)}
 .purse.pop{animation:pop .5s}
 @keyframes pop{40%{transform:scale(1.18)}}
 nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:16px}
-nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:500;font-size:12px;padding:9px 4px;border-radius:9px;cursor:pointer}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:500;font-size:var(--cs-phu);padding:9px 4px;border-radius:9px;cursor:pointer}
 nav button.on{background:var(--tx);color:var(--bg);font-weight:700}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 section{display:none}section.on{display:block}
 .row{display:flex;align-items:center;gap:8px}
 .bar{justify-content:space-between;margin-bottom:12px}
-.bar h2{margin:0;font-size:12px}
-.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:12px;padding:8px 12px;border-radius:9px;cursor:pointer}
+.bar h2{margin:0;font-size:var(--cs-tieu-de)}
+.btn{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:var(--cs-noi-dung);padding:8px 12px;border-radius:9px;cursor:pointer}
 .btn.pri{background:var(--teal);border-color:var(--teal);color:var(--on);font-weight:700}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-input,select{font:inherit;font-size:13px;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:9px;padding:9px 11px}
+input,select,textarea{font:inherit;font-size:max(16px,var(--cs-noi-dung));color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:9px;padding:9px 11px}
 input.grow{flex:1;min-width:0}
 .prog{height:8px;background:var(--bd);border-radius:9px;overflow:hidden;margin:4px 0 14px}
 .prog b{display:block;height:100%;background:var(--teal);width:0;transition:width .3s}
 .task{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:11px 12px;margin-bottom:8px}
-.task .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--mut);background:none;cursor:pointer;flex:none;color:var(--on);font-size:14px;line-height:1}
+.task .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--mut);background:none;cursor:pointer;flex:none;color:var(--on);font-size:var(--cs-phu);line-height:1}
 .task.done .ck{background:var(--teal);border-color:var(--teal)}
 .task .tx{flex:1;min-width:0;overflow-wrap:anywhere}
-.task.done .tx{text-decoration:line-through;color:var(--mut)}
-.rw{font-weight:700;font-size:12px;color:var(--goldtx);background:var(--gold);border-radius:999px;padding:2px 9px;flex:none}
-.task.done .rw{opacity:.45}
-.x{border:0;background:none;color:var(--mut);cursor:pointer;font-size:18px;padding:4px 6px}
+.task.done{opacity:.5}
+.rw{font-weight:700;font-size:var(--cs-phu);color:var(--goldtx);background:var(--gold);border-radius:999px;padding:2px 9px;flex:none}
+
+.x{border:0;background:none;color:var(--mut);cursor:pointer;font-size:var(--cs-icon);padding:4px 6px}
 .empty{color:var(--mut);text-align:center;padding:28px 8px;border:1px dashed var(--bd);border-radius:12px}
 .add{margin-bottom:14px;flex-wrap:wrap}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .day{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 8px;cursor:pointer;min-height:130px;min-width:0;text-align:left;font:inherit;color:inherit}
 .day.today{border:2px solid var(--teal)}
-.day h3{margin:0;font-size:12px}
+.day h3{margin:0;font-size:var(--cs-phu)}
 .day small{color:var(--mut);display:block;margin-bottom:6px}
-.day .mt{font-size:12px;padding:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.day .mt.d{text-decoration:line-through;color:var(--mut)}
-.day .cnt{font-weight:700;font-size:12px;color:var(--teal);margin-bottom:4px}
+.day .mt{font-size:var(--cs-phu);padding:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day .mt.d{opacity:.5}
+.day .cnt{font-weight:700;font-size:var(--cs-phu);color:var(--teal);margin-bottom:4px}
 @media(max-width:640px){.week{grid-template-columns:1fr}.day{min-height:0}}
 .pomo{text-align:center;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:28px 16px}
-.pomo .t{font-size:72px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.pomo .t{font-size:var(--cs-dong-ho);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
 .pomo .m{color:var(--mut);margin-bottom:8px}
 .pomo .row{justify-content:center;margin-top:16px;flex-wrap:wrap}
 .shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px}
 .item{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .item b{overflow-wrap:anywhere}
 .item .pr{font-weight:800}
-.hist{color:var(--mut);font-size:14px;padding:4px 0;border-bottom:1px solid var(--bd)}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+.hist{color:var(--mut);font-size:var(--cs-noi-dung);padding:4px 0;border-bottom:1px solid var(--bd)}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:20}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.gear{border:1px solid var(--bd);background:var(--card);color:var(--tx);width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer}
+.gear{border:1px solid var(--bd);background:var(--card);color:var(--tx);width:40px;height:40px;border-radius:50%;font-size:var(--cs-icon);cursor:pointer}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
 .ov.on{display:flex}
 .pn{background:var(--card);color:var(--tx);border-radius:16px;padding:20px;width:100%;max-width:380px;max-height:90vh;overflow:auto}
-.pn h2{margin:0;font-size:17px}
-.pn h3{font-size:13px;color:var(--mut);margin:18px 0 8px;font-weight:500}
+.pn h2{margin:0;font-size:var(--cs-tieu-de)}
+.pn h3{font-size:var(--cs-phu);color:var(--mut);margin:18px 0 8px;font-weight:500}
 .seg{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px}
-.seg button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:13px;padding:8px 4px;border-radius:8px;cursor:pointer}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:var(--cs-noi-dung);padding:8px 4px;border-radius:8px;cursor:pointer}
 .seg button.on{background:var(--tx);color:var(--bg);font-weight:700}
 .sw{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .sw>button:not(.btn){width:32px;height:32px;border-radius:50%;border:2px solid var(--bd);cursor:pointer;padding:0}
@@ -85,36 +104,85 @@ input.grow{flex:1;min-width:0}
 .sw input{width:40px;height:32px;padding:0;border:0;background:none}
 nav button{padding-left:2px;padding-right:2px}
 .day{position:relative}
-.stamp{position:absolute;right:6px;top:6px;width:48px;height:48px;border:2px solid var(--red);color:var(--red);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:9px;font-weight:800;line-height:1.1;transform:rotate(-14deg);opacity:.85;pointer-events:none}
+.stamp{position:absolute;right:6px;top:6px;width:var(--cs-dau-moc-rong);height:var(--cs-dau-moc-rong);border:2px solid var(--red);color:var(--red);border-radius:50%;display:grid;place-items:center;text-align:center;font-size:var(--cs-dau-moc);font-weight:800;line-height:1.1;transform:rotate(-14deg);opacity:.85;pointer-events:none}
 .pg{position:relative;height:20px;background:var(--bd);border-radius:999px;overflow:hidden;min-width:80px}
 .pg b{position:absolute;left:0;top:0;bottom:0;background:var(--teal);opacity:.5}
-.pg span{position:relative;display:block;text-align:center;font-size:10px;font-weight:700;line-height:20px;white-space:nowrap;padding:0 6px}
+.pg span{position:relative;display:block;text-align:center;font-size:var(--cs-phu);font-weight:700;line-height:20px;white-space:nowrap;padding:0 6px}
 #goal{display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin-bottom:14px}
 #goal .pg{flex:1}
 .item .pg{width:100%}
-.fl{font-weight:800;color:#ff7a00;font-size:13px;flex:none}
-.flame{display:flex;flex-direction:column;align-items:center;min-width:42px;font-size:22px;line-height:1.1}
-.flame b{font-size:13px;font-weight:800;color:#ff7a00}
+.fl{font-weight:800;color:#ff7a00;font-size:var(--cs-phu);flex:none}
+.flame{display:flex;flex-direction:column;align-items:center;min-width:42px;font-size:var(--cs-icon);line-height:1.1}
+.flame b{font-size:var(--cs-noi-dung);font-weight:800;color:#ff7a00}
 .flame.off{filter:grayscale(1);opacity:.5}
 .dots{display:flex;gap:4px;margin-top:5px}
 .dots i{width:10px;height:10px;border-radius:50%;background:var(--bd)}
 .dots i.on{background:#ff7a00}
 .badges{display:flex;gap:10px;flex-wrap:wrap}
 .bdg{flex:1;min-width:90px;text-align:center;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 6px}
-.bdg .ic{font-size:36px}
+.bdg .ic{font-size:var(--cs-huy-hieu)}
 .bdg small{display:block;color:var(--mut)}
 .bdg.lock{opacity:.4;filter:grayscale(1)}
-.bdg .btn{margin-top:8px;font-size:12px;padding:6px 8px}
+.bdg .btn{margin-top:8px;font-size:var(--cs-phu);padding:6px 8px}
 ::placeholder{color:var(--mut);opacity:1}
-.sub{display:block;color:var(--mut);font-size:12px}
-.wd{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:12px;border-radius:8px;padding:6px 8px;cursor:pointer}
+.sub{display:block;color:var(--mut);font-size:var(--cs-phu)}
+.wd{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-size:var(--cs-phu);border-radius:8px;padding:6px 8px;cursor:pointer}
 .wd.on{background:var(--teal);border-color:var(--teal);color:var(--on)}
 #hdw{gap:4px;flex-wrap:wrap}
 .dots i.na{background:none;border:1px dashed var(--bd)}
 .ck:disabled{opacity:.3;cursor:default}
 html,body{touch-action:manipulation;overscroll-behavior:none;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
-.sw>button.th{width:auto;height:auto;border-radius:10px;padding:8px 12px;font:inherit;font-size:13px;font-weight:700}
+.sw>button.th{width:auto;height:auto;border-radius:10px;padding:8px 12px;font:inherit;font-size:var(--cs-phu);font-weight:700}
+.fm{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.fm input,.fm select{width:100%}
+textarea{width:100%;resize:vertical}
+.sec{font-size:var(--cs-phu);font-weight:700;color:var(--mut);margin:18px 0 8px}
+.grip{cursor:grab;color:var(--mut);touch-action:none;user-select:none;-webkit-user-select:none;padding:4px 2px;font-size:var(--cs-icon);line-height:1;flex:none}
+.task.dragging{opacity:.35}
+.task.over{outline:2px dashed var(--teal);background:color-mix(in srgb,var(--teal) 14%,var(--card))}
+.ghost{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,-130%);background:var(--tx);color:var(--bg);padding:6px 12px;border-radius:999px;font-size:var(--cs-phu);font-weight:700;max-width:70vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task.child{margin-left:26px;padding:8px 10px;position:relative}
+.task.child::before{content:'';position:absolute;left:-14px;top:50%;width:10px;height:2px;background:var(--bd)}
+.cbtn{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:60px;height:60px;border-radius:50%;border:0;background:var(--teal);color:var(--on);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;z-index:9}
+.cbtn.alert{animation:bump 1.4s infinite}
+@keyframes bump{50%{transform:translateX(-50%) scale(1.1)}}
+.ov.full{padding:0;align-items:stretch}
+.ov.full .pn{max-width:none;max-height:none;height:100%;border-radius:0;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--bg);padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.bubble{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:10px 16px;min-height:44px;text-align:center;max-width:90%}
+.cstats{display:flex;flex-direction:column;gap:6px;width:min(90%,360px)}
+.csec{width:min(90%,420px)}
+.csec h3{margin:6px 0}
+.csec .row{flex-wrap:wrap}
+#cg{animation:bob 3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+#cg.squish{animation:squish .5s}
+#cg.hop{animation:hop .5s}
+#chead{transform-box:fill-box;transform-origin:50% 90%}
+#chead.shake{animation:shake .5s}
+.eye{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes squish{30%{transform:scale(1.1,.88)}60%{transform:scale(.95,1.06)}}
+@keyframes hop{40%{transform:translateY(-24px)}}
+@keyframes shake{25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+
+.stage{position:relative;width:min(92vw,420px);height:min(44vh,330px);flex:none;border-radius:18px;background:linear-gradient(var(--card),var(--bg));border:1px solid var(--bd);overflow:hidden}
+.stage::after{content:'';position:absolute;left:0;right:0;bottom:0;height:16%;background:color-mix(in srgb,var(--bd) 70%,transparent);pointer-events:none}
+.cw{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:100%;aspect-ratio:240/300;z-index:2;pointer-events:none}
+.cw svg{width:100%;height:100%;display:block}
+#cbody,#chead{pointer-events:auto}
+#cpad{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:auto;cursor:crosshair;touch-action:none}
+.drawing #cpad{display:block}
+#props{position:absolute;inset:0;z-index:1}
+.prop{position:absolute;transform:translate(-50%,-50%);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;-webkit-user-drag:none;height:auto}
+.prop.sel{outline:2px dashed var(--teal);outline-offset:2px}
+.tl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center}
+.tl .c{width:26px;height:26px;border-radius:50%;border:2px solid var(--bd);padding:0;cursor:pointer}
+.tl .c.on{border-color:var(--tx)}
+.ipad{width:min(80vw,300px);aspect-ratio:1;background:var(--card);border:1px dashed var(--bd);border-radius:12px;touch-action:none}
+.cm{display:contents}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+body{font-size:var(--cs-noi-dung)}
 </style>
 </head>
 <body>
@@ -136,11 +204,7 @@ html,body{touch-action:manipulation;overscroll-behavior:none;-webkit-text-size-a
       <div class="row"><button class="btn" id="td">Hôm nay</button><button class="btn" id="nd">›</button></div>
     </div>
     <div class="prog"><b id="pb"></b></div>
-    <div class="row add">
-      <input class="grow" id="nt" placeholder="Nhập việc cần làm" maxlength="120">
-      <select id="nr"><option value="5">+5 xu</option><option value="10" selected>+10 xu</option><option value="20">+20 xu</option><option value="50">+50 xu</option></select>
-      <button class="btn pri" id="addt">Thêm việc</button>
-    </div>
+    <div class="row bar"><button class="btn pri" id="opent"></button></div>
     <div id="list"></div>
   </section>
 
@@ -166,20 +230,14 @@ html,body{touch-action:manipulation;overscroll-behavior:none;-webkit-text-size-a
   </section>
 
   <section id="shop">
-    <div class="row add">
-      <input class="grow" id="sn" placeholder="Phần thưởng muốn đổi" maxlength="60">
-      <input id="sp" type="number" min="1" style="width:100px"><select id="sh"></select><input id="sd" type="number" min="1" style="width:90px">
-      <button class="btn pri" id="adds">Thêm quà</button>
-    </div>
-    <div class="row bar"><button class="btn" id="sortb"></button></div>
+        <div class="row bar"><button class="btn" id="sortb"></button><button class="btn pri" id="opens"></button></div>
     <div class="shop" id="items"></div>
-    <h2 style="font-size:16px">Đã đổi</h2>
+    <h2 style="font-size:var(--cs-tieu-de)">Đã đổi</h2>
     <div id="hist"></div>
   </section>
 
   <section id="habits">
-    <div class="row add"><input class="grow" id="hn" maxlength="60"><button class="btn pri" id="addh"></button></div>
-    <div class="row add"><select id="hf"></select><div class="row" id="hdw"></div><input id="hdm" type="number" min="1" max="31" style="width:130px"><select id="hdur"></select><input id="hend" type="date"></div>
+    <div class="row bar"><button class="btn pri" id="openh"></button></div>
     <div id="hl"></div>
   </section>
 </div>
@@ -192,14 +250,112 @@ html,body{touch-action:manipulation;overscroll-behavior:none;-webkit-text-size-a
   <div class="row" style="justify-content:space-between"><h2 data-i="badgesT"></h2><button class="x" id="clsb" aria-label="Close">×</button></div>
   <div class="badges" id="bd" style="margin-top:14px"></div>
 </div></div>
+<div class="ov" id="ovs"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="justify-content:space-between"><h2 data-i="addReward"></h2><button class="x" id="clss" aria-label="Close">×</button></div>
+  <div class="fm">
+    <input id="sn" maxlength="60">
+    <input id="sp" type="number" min="1">
+    <select id="sh"></select>
+    <input id="sd" type="number" min="1">
+    <span class="sub" data-i="hintS"></span>
+    <button class="btn pri" id="adds"></button>
+  </div>
+</div></div>
+<div class="ov" id="ovt"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="justify-content:space-between"><h2 data-i="addTask"></h2><button class="x" id="clst" aria-label="Close">×</button></div>
+  <div class="fm">
+    <input id="nt" maxlength="120">
+    <select id="nr"><option value="5">+5</option><option value="10" selected>+10</option><option value="20">+20</option><option value="50">+50</option></select>
+    <input type="date" id="ntd">
+    <button class="btn pri" id="addt"></button>
+  </div>
+</div></div>
+<div class="ov" id="ovh"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="justify-content:space-between"><h2 data-i="addHabit"></h2><button class="x" id="clsh" aria-label="Close">×</button></div>
+  <div class="fm">
+    <input id="hn" maxlength="60">
+    <select id="hf"></select>
+    <div class="row" id="hdw"></div>
+    <input id="hdm" type="number" min="1" max="31">
+    <select id="hdur"></select>
+    <input id="hend" type="date">
+    <button class="btn pri" id="addh"></button>
+  </div>
+</div></div>
+<div class="ov" id="ovd"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="justify-content:space-between;gap:8px"><input id="dt" class="grow" maxlength="120" style="font-weight:700"><button class="x" id="clsd" aria-label="Close">×</button></div>
+  <h3 data-i="lblDate"></h3><input type="date" id="dd" style="width:100%">
+  <h3 data-i="lblNote"></h3><textarea id="dn" rows="4"></textarea>
+  <h3 data-i="lblSub"></h3><div id="dsl"></div>
+  <div class="row add" style="margin-top:8px"><input class="grow" id="dsn" maxlength="100"><button class="btn" id="dsa"></button></div>
+  <button class="btn" id="ddel" style="margin-top:14px;color:var(--red)"></button>
+</div></div>
+<div class="ov full" id="ovc"><div class="pn" role="dialog" aria-modal="true">
+  <div class="row" style="width:100%;gap:8px">
+    <input id="cn" class="grow" maxlength="20" style="text-align:center;font-weight:700;font-size:var(--cs-tieu-de)">
+    <div class="purse" style="font-size:var(--cs-noi-dung)"><i>$</i><span id="ccoins">0</span></div>
+    <button class="x" id="clsc" aria-label="Close">×</button>
+  </div>
+  <div class="sub" id="cage" style="text-align:center"></div>
+  <div class="bubble" id="cb"></div>
+  <div class="stage" id="stage">
+    <div id="props"></div>
+    <div class="cw">
+      <svg id="csvg" viewBox="0 0 240 300">
+        <defs><clipPath id="cclip"><circle cx="120" cy="112" r="54"/><ellipse cx="120" cy="198" rx="58" ry="62"/><ellipse cx="56" cy="204" rx="12" ry="30" transform="rotate(14 56 204)"/><ellipse cx="184" cy="204" rx="12" ry="30" transform="rotate(-14 184 204)"/></clipPath></defs>
+        <ellipse cx="120" cy="288" rx="70" ry="9" fill="rgba(0,0,0,.15)"/>
+        <g id="cs">
+          <g id="cg">
+            <g fill="#2b3a55"><rect x="92" y="238" width="20" height="42" rx="10"/><rect x="128" y="238" width="20" height="42" rx="10"/></g>
+            <ellipse cx="56" cy="204" rx="12" ry="30" fill="#f6c9a0" transform="rotate(14 56 204)"/>
+            <ellipse cx="184" cy="204" rx="12" ry="30" fill="#f6c9a0" transform="rotate(-14 184 204)"/>
+            <g id="cbody" style="cursor:pointer"><ellipse cx="120" cy="198" rx="58" ry="62" style="fill:var(--teal)"/><rect x="62" y="150" width="116" height="110" fill="transparent"/></g>
+            <ellipse id="cdiaper" cx="120" cy="240" rx="42" ry="20" fill="#fff" stroke="#ddd" style="display:none"/>
+            <text id="cbadges" x="120" y="214" text-anchor="middle" font-size="26"></text>
+            <g id="chead" style="cursor:pointer">
+              <circle cx="66" cy="116" r="10" fill="#f6c9a0"/><circle cx="174" cy="116" r="10" fill="#f6c9a0"/>
+              <circle cx="120" cy="112" r="54" fill="#f6c9a0"/>
+              <path id="chair" d="M68 100 Q72 50 120 50 Q168 50 172 100 Q150 74 120 76 Q90 74 68 100Z" fill="#3a2a20"/>
+              <path id="ctuft" d="M110 62 Q114 42 128 54" stroke="#3a2a20" stroke-width="5" fill="none" stroke-linecap="round" style="display:none"/>
+              <g class="eye"><ellipse cx="102" cy="116" rx="6" ry="8" fill="#1d1d1f"/></g>
+              <g class="eye"><ellipse cx="138" cy="116" rx="6" ry="8" fill="#1d1d1f"/></g>
+              <g id="cglass" style="display:none" fill="none" stroke="#333" stroke-width="3"><circle cx="102" cy="116" r="13"/><circle cx="138" cy="116" r="13"/><path d="M115 116 L125 116"/></g>
+              <circle cx="90" cy="134" r="7" fill="#ff9aa2" opacity=".55"/><circle cx="150" cy="134" r="7" fill="#ff9aa2" opacity=".55"/>
+              <path id="cmouth" d="M108 144 L132 144" stroke="#6b2d2d" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text id="chatx" x="120" y="62" text-anchor="middle" font-size="54"></text>
+            </g>
+            <image id="cpaint" x="0" y="0" width="240" height="300" clip-path="url(#cclip)" style="pointer-events:none;display:none"/>
+          </g>
+        </g>
+      </svg>
+      <canvas id="cpad" width="480" height="600"></canvas>
+    </div>
+  </div>
+  <div class="cm" id="cmain">
+    <div class="tl" id="cprop" style="display:none"><span class="sub" data-i="propSel"></span><button class="btn" id="pm">−</button><button class="btn" id="pp">+</button><button class="btn" id="pdel">🗑</button></div>
+    <div class="cstats" id="cst"></div>
+    <div class="csec"><h3 data-i="feed"></h3><div class="row" id="cfood"></div></div>
+    <div class="csec"><h3 data-i="outfit"></h3><div class="row" id="chat"></div></div>
+    <div class="csec"><h3 data-i="custom"></h3><div class="row"><button class="btn" id="bpaint"></button><button class="btn" id="bitem"></button><button class="btn" id="bphoto"></button></div></div>
+  </div>
+  <div class="csec" id="cdraw" style="display:none"><div class="tl" id="ctl"></div><div class="row" style="justify-content:center;margin-top:10px"><button class="btn pri" id="pok"></button><button class="btn" id="pcan"></button></div></div>
+  <input type="file" accept="image/*" id="cfile" hidden>
+</div></div>
+<div class="ov" id="ovi"><div class="pn" role="dialog" aria-modal="true" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+  <div class="row" style="width:100%;justify-content:space-between"><h2 data-i="drawItem"></h2><button class="x" id="clsi" aria-label="Close">×</button></div>
+  <canvas class="ipad" id="ipad" width="300" height="300"></canvas>
+  <div class="tl" id="itl"></div>
+  <button class="btn pri" id="iok"></button>
+</div></div>
+<button class="cbtn" id="cbtn" aria-label="Character"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><circle cx="12" cy="8" r="4.2"/><path d="M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5z"/></svg></button>
 <div class="toast" id="toast"></div>
 
 <script>
 const $=s=>document.querySelector(s);
 const KEY='planner-xu-v1';
-let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{},set:{lang:'vi',theme:'blue'},habits:[],badges:{},worn:{},pin:0,sort:'asc'};
+let S={coins:0,tasks:[],shop:[{id:1,name:'Trà sữa',price:50},{id:2,name:'1 tập phim',price:30},{id:3,name:'30 phút chơi game',price:40}],bought:[],pomos:{},set:{lang:'vi',theme:'blue'},habits:[],badges:{},worn:{},pin:0,sort:'asc',char:{name:'',fed:80,fedAt:Date.now(),hat:'',owned:[],days:{},paint:''},scene:[]};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){toast(tr('storageFull'));}};
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
@@ -217,22 +373,35 @@ $('#nav').onclick=e=>{if(e.target.dataset.t)tab(e.target.dataset.t);};
 
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
 
+let curId=0,drag=null;
+function sec(L,txt,n){L.append(el('div','sec',txt+' · '+n));}
+function taskRow(t,child){
+  const kids=child?[]:S.tasks.filter(k=>k.parent===t.id),kd=kids.filter(k=>k.done).length;
+  const r=el('div','task'+(child?' child':'')+(t.done?' done':''));
+  const c=el('button','ck',t.done?'✓':'');c.setAttribute('aria-label','Done');c.onclick=()=>toggle(t.id);
+  const tx=el('div','tx');tx.style.cursor='pointer';tx.append(el('div','',t.text));
+  const meta=[];if(kids.length)meta.push('☰ '+kd+'/'+kids.length);if(t.note)meta.push('📝');
+  if(meta.length)tx.append(el('small','sub',meta.join('   ')));
+  tx.onclick=()=>openD(child?t.parent:t.id);
+  r.append(c,tx,el('span','rw','+'+t.reward));
+  if(!t.done||child)r.dataset.tid=t.id;
+  if(!t.done){const g=el('span','grip','⠿');g.onpointerdown=e=>startDrag(e,t,r);r.append(g);}
+  const x=el('button','x','×');x.setAttribute('aria-label','Delete');x.onclick=()=>delTask(t.id);
+  r.append(x);return r;
+}
+function grp(L,t){L.append(taskRow(t));S.tasks.filter(k=>k.parent===t.id).forEach(k=>L.append(taskRow(k,true)));}
 function renderToday(){
   const d=parse(sel);
   $('#dlabel').textContent=(sel===todayStr()?tr('todayC'):DOWS[S.set.lang][d.getDay()]+', ')+pad(d.getDate())+'/'+pad(d.getMonth()+1);
-  const ts=S.tasks.filter(t=>t.date===sel);
-  const done=ts.filter(t=>t.done).length;
-  $('#pb').style.width=(ts.length?done/ts.length*100:0)+'%';
+  const all=S.tasks.filter(t=>t.date===sel&&!t.parent),todo=all.filter(t=>!t.done),dn=all.filter(t=>t.done);
+  $('#pb').style.width=(all.length?dn.length/all.length*100:0)+'%';
   const L=$('#list');L.innerHTML='';
   const hs=sel===todayStr()?S.habits.filter(h=>dueOn(h,sel)):[];
-  hs.forEach(h=>{const dn=!!h.log[sel],r=el('div','task'+(dn?' done':'')),c=el('button','ck',dn?'✓':'');c.onclick=()=>tickHabit(h.id);r.append(c,el('div','tx',h.name),el('span','fl','🔥 '+streakOf(h)));L.append(r);});
-  if(!ts.length&&!hs.length){L.append(el('div','empty',tr('emptyT')));return;}
-  ts.forEach(t=>{
-    const r=el('div','task'+(t.done?' done':''));
-    const c=el('button','ck',t.done?'✓':'');c.setAttribute('aria-label','Hoàn thành');c.onclick=()=>toggle(t.id);
-    const x=el('button','x','×');x.setAttribute('aria-label','Xóa việc');x.onclick=()=>{if(t.done)earn(-t.reward);S.tasks=S.tasks.filter(k=>k.id!==t.id);save();render();};
-    r.append(c,el('div','tx',t.text),el('span','rw','+'+t.reward),x);L.append(r);
-  });
+  if(!all.length&&!hs.length){L.append(el('div','empty',tr('emptyT')));return;}
+  if(todo.length){sec(L,tr('secTodo'),todo.length);todo.forEach(t=>grp(L,t));}
+  if(hs.length){sec(L,tr('habits'),hs.length);
+    hs.forEach(h=>{const ok=!!h.log[sel],r=el('div','task'+(ok?' done':'')),c=el('button','ck',ok?'✓':'');c.onclick=()=>tickHabit(h.id);r.append(c,el('div','tx',h.name),el('span','fl','🔥 '+streakOf(h)));L.append(r);});}
+  if(dn.length){sec(L,tr('secDone'),dn.length);dn.forEach(t=>grp(L,t));}
 }
 function toggle(id){
   const t=S.tasks.find(k=>k.id===id);if(!t)return;
@@ -240,10 +409,68 @@ function toggle(id){
   if(t.done){earn(t.reward);toast(tr('earned',t.reward));}else earn(-t.reward);
   save();render();
 }
+function delTask(id){
+  const ids=new Set([id]);S.tasks.forEach(k=>{if(k.parent===id)ids.add(k.id);});
+  S.tasks.filter(k=>ids.has(k.id)&&k.done).forEach(k=>earn(-k.reward));
+  S.tasks=S.tasks.filter(k=>!ids.has(k.id));save();render();
+}
 function addTask(){
   const v=$('#nt').value.trim();if(!v)return;
-  S.tasks.push({id:uid(),text:v,date:sel,reward:+$('#nr').value,done:false});
-  $('#nt').value='';save();render();
+  S.tasks.push({id:uid(),text:v,date:$('#ntd').value||sel,reward:+$('#nr').value,done:false});
+  $('#nt').value='';$('#ovt').classList.remove('on');save();render();
+}
+/* kéo thả: thả một việc lên việc khác để thành việc nhỏ */
+function rowAt(e){const x=document.elementFromPoint(e.clientX,e.clientY);return x?x.closest('[data-tid]'):null;}
+function startDrag(e,t,row){
+  e.preventDefault();
+  const g=el('div','ghost',t.text);document.body.append(g);
+  drag={t,row,g};row.classList.add('dragging');moveDrag(e);
+  window.addEventListener('pointermove',moveDrag);window.addEventListener('pointerup',endDrag);window.addEventListener('pointercancel',stopDrag);
+}
+function moveDrag(e){
+  if(!drag)return;
+  drag.g.style.left=e.clientX+'px';drag.g.style.top=e.clientY+'px';
+  document.querySelectorAll('.task.over').forEach(x=>x.classList.remove('over'));
+  const r=rowAt(e);if(r&&+r.dataset.tid!==drag.t.id)r.classList.add('over');
+}
+function stopDrag(){
+  if(!drag)return null;
+  drag.g.remove();drag.row.classList.remove('dragging');
+  document.querySelectorAll('.task.over').forEach(x=>x.classList.remove('over'));
+  window.removeEventListener('pointermove',moveDrag);window.removeEventListener('pointerup',endDrag);window.removeEventListener('pointercancel',stopDrag);
+  const d=drag;drag=null;return d;
+}
+function endDrag(e){
+  const r=rowAt(e),d=stopDrag();if(!d)return;
+  const t=d.t;
+  if(!r){if(t.parent){t.parent=0;save();render();toast(tr('detached'));}return;}
+  const hit=S.tasks.find(k=>k.id===+r.dataset.tid);if(!hit||hit.id===t.id)return;
+  const pid=hit.parent||hit.id;
+  if(pid===t.parent||pid===t.id)return;
+  if(S.tasks.some(k=>k.parent===t.id)){toast(tr('noNest'));return;}
+  const p=S.tasks.find(k=>k.id===pid);
+  t.parent=pid;t.date=p.date;save();render();toast(tr('nested'));
+}
+/* khung chi tiết việc */
+const cur=()=>S.tasks.find(k=>k.id===curId);
+function openD(id){curId=id;drawDetail();$('#ovd').classList.add('on');}
+function closeD(){$('#ovd').classList.remove('on');curId=0;render();}
+function drawDetail(){
+  const t=cur();if(!t){closeD();return;}
+  if($('#dt').value!==t.text)$('#dt').value=t.text;
+  if($('#dd').value!==t.date)$('#dd').value=t.date;
+  if($('#dn').value!==(t.note||''))$('#dn').value=t.note||'';
+  const L=$('#dsl');L.innerHTML='';
+  S.tasks.filter(k=>k.parent===t.id).forEach(k=>{
+    const r=el('div','task'+(k.done?' done':'')),c=el('button','ck',k.done?'✓':'');c.onclick=()=>toggle(k.id);
+    const u=el('button','x','↑');u.title=tr('detach');u.onclick=()=>{k.parent=0;save();render();};
+    const x=el('button','x','×');x.onclick=()=>delTask(k.id);
+    r.append(c,el('div','tx',k.text),u,x);L.append(r);
+  });
+}
+function addSub(){
+  const v=$('#dsn').value.trim(),t=cur();if(!v||!t)return;
+  S.tasks.push({id:uid(),text:v,date:t.date,reward:5,done:false,parent:t.id});$('#dsn').value='';save();render();
 }
 $('#addt').onclick=addTask;
 $('#nt').onkeydown=e=>{if(e.key==='Enter')addTask();};
@@ -256,14 +483,14 @@ function renderWeek(){
   $('#wlabel').textContent=pad(wk.getDate())+'/'+pad(wk.getMonth()+1)+' – '+pad(e.getDate())+'/'+pad(e.getMonth()+1);
   const G=$('#wgrid');G.innerHTML='';
   for(let i=0;i<7;i++){
-    const d=addDays(wk,i),k=ymd(d),ts=S.tasks.filter(t=>t.date===k);
+    const d=addDays(wk,i),k=ymd(d),ts=S.tasks.filter(t=>t.date===k),top=ts.filter(t=>!t.parent);
     const b=el('button','day'+(k===todayStr()?' today':''));
     b.append(el('h3','',DOWS[S.set.lang][d.getDay()]),el('small','',pad(d.getDate())+'/'+pad(d.getMonth()+1)));
     const hd=S.habits.filter(h=>dueOn(h,k));
     if((ts.length||hd.length)&&ts.every(t=>t.done)&&hd.every(h=>h.log[k]))b.append(el('div','stamp',tr('perfect')));
-    if(ts.length)b.append(el('div','cnt',ts.filter(t=>t.done).length+'/'+ts.length+' '+tr('done')));
-    ts.slice(0,5).forEach(t=>b.append(el('div','mt'+(t.done?' d':''),t.text)));
-    if(ts.length>5)b.append(el('div','mt','+'+(ts.length-5)+' '+tr('more')));
+    if(top.length)b.append(el('div','cnt',top.filter(t=>t.done).length+'/'+top.length+' '+tr('done')));
+    top.slice(0,5).forEach(t=>b.append(el('div','mt'+(t.done?' d':''),t.text)));
+    if(top.length>5)b.append(el('div','mt','+'+(top.length-5)+' '+tr('more')));
     b.onclick=()=>{sel=k;tab('today');};
     G.append(b);
   }
@@ -359,7 +586,7 @@ function addHabit(){
   else if(M[du])end=ymd(M[du]());
   const dom=Math.min(31,Math.max(1,Math.floor(+$('#hdm').value||t.getDate())));
   S.habits.push({id:uid(),name:v,created:todayStr(),log:{},freq:f,days:(f==='weekly'||f==='biweekly')?days:[],dom,end});
-  $('#hn').value='';hsel.clear();save();render();
+  $('#hn').value='';hsel.clear();$('#ovh').classList.remove('on');save();render();
 }
 $('#addh').onclick=addHabit;$('#hn').onkeydown=e=>{if(e.key==='Enter')addHabit();};
 function renderHabits(){
@@ -413,18 +640,18 @@ $('#sortb').onclick=()=>{S.sort=S.sort==='desc'?'asc':'desc';save();render();};
 function addShop(){
   const n=$('#sn').value.trim(),p=Math.max(0,Math.floor(+$('#sp').value||0)),h=+$('#sh').value||0,dd=Math.floor(+$('#sd').value||0),hb=h&&dd>0;
   if(!n||(!(p>0)&&!hb)){toast(tr('needSh'));return;}
-  S.shop.push({id:uid(),name:n,price:p,habit:hb?h:0,days:hb?dd:0});$('#sn').value='';$('#sp').value='';$('#sd').value='';save();render();
+  S.shop.push({id:uid(),name:n,price:p,habit:hb?h:0,days:hb?dd:0});$('#sn').value='';$('#sp').value='';$('#sd').value='';$('#sh').value='';$('#ovs').classList.remove('on');save();render();
 }
 $('#adds').onclick=addShop;
 
 function renderHead(){$('#coins').textContent=S.coins;}
-function render(){renderHead();renderToday();renderWeek();renderShop();renderHabits();drawHForm();renderGoal();fillHSel();fillPTask();drawP();}
+function render(){checkGrowth();renderHead();renderToday();renderWeek();renderShop();renderHabits();drawHForm();renderGoal();fillHSel();fillPTask();drawP();$('#cbtn').classList.toggle('alert',fullness()<25);if($('#ovc').classList.contains('on'))drawChar();if(curId&&$('#ovd').classList.contains('on'))drawDetail();}
 
 /* Settings + i18n */
-const T={vi:{today:'Hôm nay',week:'Tuần',shop:'Cửa hàng',todayC:'Hôm nay, ',addTask:'Thêm việc',reset:'Đặt lại',skip:'Bỏ qua',addReward:'Thêm quà',redeemed:'Đã đổi',phNt:'Nhập việc cần làm',phSn:'Phần thưởng muốn đổi',phSp:'Giá',unit:'xu',emptyT:'Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.',earned:'+{0} xu! Làm tốt lắm',noTask:'Không chọn việc',focus:'Tập trung',brk:'Nghỉ ngắn',pause:'Tạm dừng',start:'Bắt đầu',pomoDone:'Xong phiên! +5 xu. Nghỉ chút nhé',breakDone:'Hết giờ nghỉ, vào việc thôi',buy:'Đổi · {0} xu',bought:'Đã đổi: ',emptyS:'Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.',emptyH:'Chưa đổi món nào.',needSh:'Nhập tên quà, kèm giá hoặc thói quen và số ngày',done:'xong',more:'việc nữa',pnote1:'Mỗi phiên tập trung 25 phút xong nhận +5 xu. Hôm nay: ',pnote2:' phiên.',settings:'Cài đặt',lang:'Ngôn ngữ',theme:'Màu giao diện',auto:'Tự động',light:'Sáng',dark:'Tối',bg:'Màu nền',reset2:'Mặc định',habits:'Thói quen',addHabit:'Thêm thói quen',phHb:'Thói quen mới',days:'ngày',badgesT:'Huy hiệu',bronze:'Đồng',silver:'Bạc',gold:'Vàng',badgeGot:'Huy hiệu {0}!',perfect:'HOÀN HẢO',sortA:'Giá tăng dần ↑',sortD:'Giá giảm dần ↓',noHabit:'Không cần thói quen',redeem:'Đổi',emptyH2:'Chưa có thói quen. Thêm một thói quen để bắt đầu chuỗi ngày.',wear:'Đeo',worn:'Đang đeo',txc:'Màu chữ',fDaily:'Mỗi ngày',fWeekly:'Vài ngày trong tuần',fBi:'2 tuần một lần',fMonthly:'Hằng tháng',dNone:'Không giới hạn thời gian',d1w:'Duy trì 1 tuần',d2w:'Duy trì 2 tuần',d1m:'Duy trì 1 tháng',d3m:'Duy trì 3 tháng',d6m:'Duy trì 6 tháng',d1y:'Duy trì 1 năm',dDate:'Chọn ngày kết thúc',phDom:'Ngày trong tháng',needDays:'Chọn ít nhất một ngày trong tuần',needEnd:'Chọn ngày kết thúc hợp lệ',until:'đến',mDay:'ngày'},
-en:{today:'Today',week:'Week',shop:'Shop',todayC:'Today, ',addTask:'Add task',reset:'Reset',skip:'Skip',addReward:'Add reward',redeemed:'Redeemed',phNt:'What needs doing...',phSn:'Reward you want (e.g. bubble tea)',phSp:'Price (coins)',unit:'coins',emptyT:'No tasks yet. Add your first one to start earning coins.',earned:'+{0} coins! Nice work',noTask:'No task selected',focus:'Focus',brk:'Short break',pause:'Pause',start:'Start',pomoDone:'Session done! +5 coins. Take a break',breakDone:'Break over, back to it',buy:'Redeem · {0} coins',bought:'Redeemed: ',emptyS:'No rewards yet. Add something to treat yourself with.',emptyH:'Nothing redeemed yet.',needSh:'Enter a name, plus a price or a habit and days',done:'done',more:'more',pnote1:'Each 25-minute focus session earns +5 coins. Today: ',pnote2:' sessions.',settings:'Settings',lang:'Language',theme:'Color theme',auto:'Auto',light:'Light',dark:'Dark',bg:'Background color',reset2:'Default',habits:'Habits',addHabit:'Add habit',phHb:'New habit (e.g. read 20 min)',days:'days',badgesT:'Badges',bronze:'Bronze',silver:'Silver',gold:'Gold',badgeGot:'{0} badge unlocked!',perfect:'PERFECT',sortA:'Price: low to high ↑',sortD:'Price: high to low ↓',noHabit:'No habit required',redeem:'Redeem',emptyH2:'No habits yet. Add one to start a streak.',wear:'Wear',worn:'Wearing',txc:'Text color',fDaily:'Every day',fWeekly:'Some days of the week',fBi:'Every 2 weeks',fMonthly:'Monthly',dNone:'No end date',d1w:'Keep for 1 week',d2w:'Keep for 2 weeks',d1m:'Keep for 1 month',d3m:'Keep for 3 months',d6m:'Keep for 6 months',d1y:'Keep for 1 year',dDate:'Pick an end date',phDom:'Day of month',needDays:'Pick at least one weekday',needEnd:'Pick a valid end date',until:'until',mDay:'day'}};
+const T={vi:{today:'Hôm nay',week:'Tuần',shop:'Cửa hàng',todayC:'Hôm nay, ',addTask:'Thêm việc',reset:'Đặt lại',skip:'Bỏ qua',addReward:'Thêm quà',redeemed:'Đã đổi',phNt:'Việc cần làm...',phSn:'Phần thưởng muốn đổi (vd: trà sữa)',phSp:'Giá (xu)',unit:'xu',emptyT:'Chưa có việc nào. Thêm việc đầu tiên để bắt đầu kiếm xu.',earned:'+{0} xu! Làm tốt lắm',noTask:'Không chọn việc',focus:'Tập trung',brk:'Nghỉ ngắn',pause:'Tạm dừng',start:'Bắt đầu',pomoDone:'Xong phiên! +5 xu. Nghỉ chút nhé',breakDone:'Hết giờ nghỉ, vào việc thôi',buy:'Đổi · {0} xu',bought:'Đã đổi: ',emptyS:'Chưa có phần thưởng. Thêm món bạn muốn tự thưởng.',emptyH:'Chưa đổi món nào.',needSh:'Nhập tên quà, kèm giá hoặc thói quen và số ngày',done:'xong',more:'việc nữa',pnote1:'Mỗi phiên tập trung 25 phút xong nhận +5 xu. Hôm nay: ',pnote2:' phiên.',settings:'Cài đặt',lang:'Ngôn ngữ',theme:'Màu giao diện',auto:'Tự động',light:'Sáng',dark:'Tối',bg:'Màu nền',reset2:'Mặc định',habits:'Thói quen',addHabit:'Thêm thói quen',phHb:'Thói quen mới (vd: đọc sách 20 phút)',days:'ngày',badgesT:'Huy hiệu',bronze:'Đồng',silver:'Bạc',gold:'Vàng',badgeGot:'Huy hiệu {0}!',perfect:'HOÀN HẢO',sortA:'Giá tăng dần ↑',sortD:'Giá giảm dần ↓',noHabit:'Không cần thói quen',redeem:'Đổi',emptyH2:'Chưa có thói quen. Thêm một thói quen để bắt đầu chuỗi ngày.',wear:'Đeo',worn:'Đang đeo',txc:'Màu chữ',fDaily:'Mỗi ngày',fWeekly:'Vài ngày trong tuần',fBi:'2 tuần một lần',fMonthly:'Hằng tháng',dNone:'Không giới hạn thời gian',d1w:'Duy trì 1 tuần',d2w:'Duy trì 2 tuần',d1m:'Duy trì 1 tháng',d3m:'Duy trì 3 tháng',d6m:'Duy trì 6 tháng',d1y:'Duy trì 1 năm',dDate:'Chọn ngày kết thúc',phDom:'Ngày trong tháng',needDays:'Chọn ít nhất một ngày trong tuần',needEnd:'Chọn ngày kết thúc hợp lệ',until:'đến',mDay:'ngày',newReward:'+ Thêm quà',hintS:'Điền giá, hoặc chọn thói quen kèm số ngày, hoặc cả hai (món cao cấp).',secTodo:'Cần làm',secDone:'Đã hoàn thành',newTask:'+ Thêm việc',newHabit:'+ Thêm thói quen',lblDate:'Ngày',lblNote:'Ghi chú',lblSub:'Việc nhỏ',phSub:'Thêm việc nhỏ...',phNote:'Ghi chú cho việc này...',delTask:'Xóa việc',addBtn:'Thêm',moved:'Đã đổi ngày',nested:'Đã gộp thành việc nhỏ',noNest:'Việc này đã có việc nhỏ nên không gộp tiếp được',detach:'Tách ra thành việc riêng',feed:'Cho ăn',outfit:'Trang phục',nameDef:'Đặt tên cho mình',detached:'Đã tách ra thành việc riêng',baby:'Em bé',teen:'Thiếu niên',adult:'Trưởng thành',senior:'Cao tuổi',yrs:'tuổi',grewUp:'Nhân vật lên {0} tuổi rồi!',custom:'Tùy chỉnh',paintC:'🎨 Vẽ lên nhân vật',drawItem:'✏️ Vẽ vật dụng',addPhoto:'🖼 Thêm ảnh',doneB:'Xong',cancelB:'Hủy',addToScene:'Thêm vào khu vực',propSel:'Vật đã chọn:',sceneFull:'Khu vực đã đủ đồ, hãy xóa bớt',storageFull:'Bộ nhớ trình duyệt đã đầy, hãy xóa bớt ảnh hoặc hình vẽ',emptyDraw:'Hãy vẽ gì đó trước nhé'},
+en:{today:'Today',week:'Week',shop:'Shop',todayC:'Today, ',addTask:'Add task',reset:'Reset',skip:'Skip',addReward:'Add reward',redeemed:'Redeemed',phNt:'What needs doing...',phSn:'Reward you want (e.g. bubble tea)',phSp:'Price (coins)',unit:'coins',emptyT:'No tasks yet. Add your first one to start earning coins.',earned:'+{0} coins! Nice work',noTask:'No task selected',focus:'Focus',brk:'Short break',pause:'Pause',start:'Start',pomoDone:'Session done! +5 coins. Take a break',breakDone:'Break over, back to it',buy:'Redeem · {0} coins',bought:'Redeemed: ',emptyS:'No rewards yet. Add something to treat yourself with.',emptyH:'Nothing redeemed yet.',needSh:'Enter a name, plus a price or a habit and days',done:'done',more:'more',pnote1:'Each 25-minute focus session earns +5 coins. Today: ',pnote2:' sessions.',settings:'Settings',lang:'Language',theme:'Color theme',auto:'Auto',light:'Light',dark:'Dark',bg:'Background color',reset2:'Default',habits:'Habits',addHabit:'Add habit',phHb:'New habit (e.g. read 20 min)',days:'days',badgesT:'Badges',bronze:'Bronze',silver:'Silver',gold:'Gold',badgeGot:'{0} badge unlocked!',perfect:'PERFECT',sortA:'Price: low to high ↑',sortD:'Price: high to low ↓',noHabit:'No habit required',redeem:'Redeem',emptyH2:'No habits yet. Add one to start a streak.',wear:'Wear',worn:'Wearing',txc:'Text color',fDaily:'Every day',fWeekly:'Some days of the week',fBi:'Every 2 weeks',fMonthly:'Monthly',dNone:'No end date',d1w:'Keep for 1 week',d2w:'Keep for 2 weeks',d1m:'Keep for 1 month',d3m:'Keep for 3 months',d6m:'Keep for 6 months',d1y:'Keep for 1 year',dDate:'Pick an end date',phDom:'Day of month',needDays:'Pick at least one weekday',needEnd:'Pick a valid end date',until:'until',mDay:'day',newReward:'+ Add reward',hintS:'Enter a price, or pick a habit with a number of days, or both (premium item).',secTodo:'To do',secDone:'Completed',newTask:'+ Add task',newHabit:'+ Add habit',lblDate:'Date',lblNote:'Note',lblSub:'Subtasks',phSub:'Add a subtask...',phNote:'Notes for this task...',delTask:'Delete task',addBtn:'Add',moved:'Date changed',nested:'Moved into a subtask',noNest:'This task already has subtasks, so it cannot be nested',detach:'Detach as its own task',feed:'Feed',outfit:'Outfit',nameDef:'Name me',detached:'Moved out as its own task',baby:'Baby',teen:'Teenager',adult:'Adult',senior:'Senior',yrs:'yrs',grewUp:'Your character turned {0}!',custom:'Customize',paintC:'🎨 Paint on character',drawItem:'✏️ Draw an item',addPhoto:'🖼 Add photo',doneB:'Done',cancelB:'Cancel',addToScene:'Add to the scene',propSel:'Selected item:',sceneFull:'The scene is full, remove something',storageFull:'Browser storage is full, remove some photos or drawings',emptyDraw:'Draw something first'}};
 const tr=(k,a)=>(T[S.set.lang][k]||k).replace('{0}',a);
-const MAP={'[data-t=today]':'today','[data-t=week]':'week','[data-t=shop]':'shop','#td':'today','#addt':'addTask','#prs':'reset','#psk':'skip','#adds':'addReward','#shop h2':'redeemed','[data-t=habits]':'habits','#addh':'addHabit'};
+const MAP={'[data-t=today]':'today','[data-t=week]':'week','[data-t=shop]':'shop','#td':'today','#addt':'addTask','#prs':'reset','#psk':'skip','#adds':'addReward','#opens':'newReward','#bpaint':'paintC','#bitem':'drawItem','#bphoto':'addPhoto','#pok':'doneB','#pcan':'cancelB','#iok':'addToScene','#opent':'newTask','#openh':'newHabit','#dsa':'addBtn','#ddel':'delTask','#shop h2':'redeemed','[data-t=habits]':'habits','#addh':'addHabit'};
 const THEMES=[
 {id:'red',vi:'Đỏ',en:'Red',v:{bg:'#fbeeee',card:'#fffafa',tx:'#4a2326',mut:'#835a5e',bd:'#f0d5d6',ac:'#b84d53',on:'#ffffff'}},
 {id:'orange',vi:'Cam',en:'Orange',v:{bg:'#fdf0e4',card:'#fffaf4',tx:'#4a2e17',mut:'#84603f',bd:'#f3dcc4',ac:'#b95b1f',on:'#ffffff'}},
@@ -444,7 +671,7 @@ function applySet(){
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=th.v.bg;
   for(const q in MAP)$(q).textContent=tr(MAP[q]);
   document.querySelectorAll('[data-i]').forEach(e=>e.textContent=tr(e.dataset.i));
-  $('#nt').placeholder=tr('phNt');$('#hn').placeholder=tr('phHb');$('#sd').placeholder=tr('days');$('#hdm').placeholder=tr('phDom');$('#sn').placeholder=tr('phSn');$('#sp').placeholder=tr('phSp');
+  $('#nt').placeholder=tr('phNt');$('#hn').placeholder=tr('phHb');$('#sd').placeholder=tr('days');$('#hdm').placeholder=tr('phDom');$('#dsn').placeholder=tr('phSub');$('#dn').placeholder=tr('phNote');$('#sn').placeholder=tr('phSn');$('#sp').placeholder=tr('phSp');
   [...$('#nr').options].forEach(o=>o.textContent='+'+o.value+' '+tr('unit'));
 }
 function drawSet(){
@@ -466,6 +693,149 @@ $('#clsb').onclick=()=>$('#ovb').classList.remove('on');
 $('#ovb').onclick=e=>{if(e.target.id==='ovb')$('#ovb').classList.remove('on');};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#ovb').classList.remove('on');});
 ['gesturestart','gesturechange'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault()));
+$('#opens').onclick=()=>{$('#ovs').classList.add('on');$('#sn').focus();};
+$('#clss').onclick=()=>$('#ovs').classList.remove('on');
+$('#ovs').onclick=e=>{if(e.target.id==='ovs')$('#ovs').classList.remove('on');};
+$('#sn').onkeydown=e=>{if(e.key==='Enter')addShop();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#ovs').classList.remove('on');});
+$('#opent').onclick=()=>{$('#ntd').value=sel;$('#ovt').classList.add('on');$('#nt').focus();};
+$('#openh').onclick=()=>{drawHForm();$('#ovh').classList.add('on');$('#hn').focus();};
+[['ovt','clst'],['ovh','clsh']].forEach(([o,c])=>{$('#'+c).onclick=()=>$('#'+o).classList.remove('on');$('#'+o).onclick=e=>{if(e.target.id===o)$('#'+o).classList.remove('on');};});
+$('#clsd').onclick=closeD;
+$('#ovd').onclick=e=>{if(e.target.id==='ovd')closeD();};
+$('#dt').oninput=e=>{const t=cur();if(t&&e.target.value.trim()){t.text=e.target.value;save();}};
+$('#dn').oninput=e=>{const t=cur();if(t){t.note=e.target.value;save();}};
+$('#dd').onchange=e=>{const t=cur(),v=e.target.value;if(!t||!v)return;t.date=v;S.tasks.forEach(k=>{if(k.parent===t.id)k.date=v;});save();toast(tr('moved'));render();};
+$('#dsa').onclick=addSub;
+$('#dsn').onkeydown=e=>{if(e.key==='Enter')addSub();};
+$('#ddel').onclick=()=>{const id=curId;closeD();delTask(id);};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){['ovt','ovh','ovc','ovi'].forEach(o=>$('#'+o).classList.remove('on'));if($('#ovd').classList.contains('on'))closeD();}});
+/* Nhân vật chính */
+const LINES={vi:{happy:['Hôm nay tuyệt lắm!','Mình thấy vui ghê!','Làm tiếp thôi nào!'],ok:['Mình ổn, còn bạn?','Hôm nay làm gì đây nhỉ?'],sad:['Mình hơi buồn...','Làm vài việc cho mình vui nhé?'],hungry:['Bụng mình kêu ọt ọt rồi...','Cho mình ăn gì đi!'],poke:['Ui da! Đừng chọc mình!','Á! Đau nha!'],tickle:['Há há, nhột quá!','Hihi, dừng lại đi!'],fed:['Ngon quá, cảm ơn bạn!','Nom nom nom!'],hat:['Đẹp không nè?','Mình thích cái này!'],poor:['Không đủ xu rồi...'],art:['Wow, đẹp quá!','Mình thích lắm!']},
+en:{happy:['Today is great!','I feel so happy!',"Let's keep going!"],ok:["I'm okay, how about you?",'What shall we do today?'],sad:['I feel a little sad...','Do a few tasks to cheer me up?'],hungry:['My tummy is rumbling...','Feed me something!'],poke:["Ouch! Don't poke me!",'Hey! That hurts!'],tickle:['Haha, that tickles!','Hehe, stop it!'],fed:['Yummy, thank you!','Nom nom nom!'],hat:['Do I look good?','I love this one!'],poor:['Not enough coins...'],art:['Wow, so pretty!','I love it!']}};
+const FOODS=[{ic:'🍎',p:5,g:15},{ic:'🍔',p:15,g:40},{ic:'🍰',p:30,g:80}];
+const HATS=[{id:'',ic:'✖',p:0},{id:'🧢',ic:'🧢',p:20},{id:'🎀',ic:'🎀',p:30},{id:'🎩',ic:'🎩',p:40},{id:'👑',ic:'👑',p:100}];
+/* Các giai đoạn: age = tuổi bắt đầu, sc = độ lớn, hair = màu tóc */
+const STAGES=[{id:'baby',age:1,sc:.72,hair:'#3a2a20'},{id:'teen',age:10,sc:.86,hair:'#8a4b2a'},{id:'adult',age:20,sc:1,hair:'#3a2a20'},{id:'senior',age:50,sc:.95,hair:'#d5d5d5'}];
+const growth=()=>Object.values(S.char.days||{}).reduce((a,b)=>a+b,0);
+const ageOf=()=>1+Math.floor(growth()/10);
+const stageOf=a=>[...STAGES].reverse().find(x=>a>=x.age);
+const fullness=()=>Math.max(0,Math.min(100,Math.round(S.char.fed-(Date.now()-S.char.fedAt)/3600000*4)));
+let drawing=false,selP=0;
+function charState(){
+  const k=todayStr(),t=S.tasks.filter(x=>x.date===k&&!x.parent),hb=S.habits.filter(h=>dueOn(h,k));
+  const n=t.length+hb.length,d=t.filter(x=>x.done).length+hb.filter(h=>h.log[k]).length;
+  return {d,n,full:fullness(),mood:n?Math.round(d/n*100):50};
+}
+/* một ngày tính 1 nếu cả 2 chỉ số >= 80%, tính 2 nếu cả 2 đạt 100%. 10 ngày = 1 tuổi */
+function checkGrowth(){
+  const c=S.char,k=todayStr(),st=charState();if(!c.days)c.days={};
+  const v=st.mood>=100&&st.full>=100?2:(st.mood>=80&&st.full>=80?1:0);
+  if(v>(c.days[k]||0)){const b=ageOf();c.days[k]=v;save();if(ageOf()>b)toast(tr('grewUp',ageOf()));}
+}
+function say(kind,extra){const L=LINES[S.set.lang][kind];$('#cb').textContent=L[Math.floor(Math.random()*L.length)]+(extra||'');}
+function anim(id,cls){const e=$('#'+id);e.classList.remove(cls);requestAnimationFrame(()=>{e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),600);});}
+function talk(){const m=$('#cmouth');m.setAttribute('d','M108 138 Q120 164 132 138Z');m.setAttribute('fill','#6b2d2d');setTimeout(drawChar,700);}
+function drawChar(){
+  const c=S.char,st=charState(),a=ageOf(),sg=stageOf(a),g=growth(),nx=STAGES.find(x=>x.age>a),face=Math.round((st.mood+st.full)/2);
+  $('#ccoins').textContent=S.coins;
+  if($('#cn')!==document.activeElement)$('#cn').value=c.name;
+  $('#cn').placeholder=tr('nameDef');
+  $('#cage').textContent=tr(sg.id)+' · '+a+' '+tr('yrs')+(nx?'   →   '+tr(nx.id)+' ('+nx.age+')':'');
+  const m=$('#cmouth');m.setAttribute('fill','none');
+  m.setAttribute('d',face>=70?'M104 138 Q120 158 136 138':face>=40?'M108 144 L132 144':'M106 150 Q120 134 134 150');
+  $('#cs').setAttribute('transform',drawing?'':'translate(120 280) scale('+sg.sc+') translate(-120 -280)');
+  $('#chair').style.display=sg.id==='baby'?'none':'';$('#chair').setAttribute('fill',sg.hair);
+  $('#ctuft').style.display=sg.id==='baby'?'':'none';$('#cdiaper').style.display=sg.id==='baby'?'':'none';
+  $('#cglass').style.display=sg.id==='senior'?'':'none';
+  const pi=$('#cpaint');pi.style.display=c.paint&&!drawing?'':'none';if(c.paint)pi.setAttribute('href',c.paint);
+  $('#chatx').textContent=c.hat;
+  $('#cbadges').textContent=BADGES.filter(b=>S.worn[b.id]).map(b=>b.ic).join('');
+  const T2=$('#cst');T2.innerHTML='';T2.append(pgBar(st.mood,100,'😊 '+st.mood+'%'),pgBar(st.full,100,'🍎 '+st.full+'%'),pgBar(g%10,10,'🎂 '+(g%10)+'/10 '+tr('days')));
+  const F=$('#cfood');F.innerHTML='';
+  FOODS.forEach(f=>{const b=el('button','btn',f.ic+' '+f.p+' '+tr('unit'));b.disabled=S.coins<f.p;b.onclick=()=>{if(S.coins<f.p){say('poor');return;}earn(-f.p);c.fed=Math.min(100,fullness()+f.g);c.fedAt=Date.now();save();anim('cg','hop');talk();say('fed');render();};F.append(b);});
+  const H=$('#chat');H.innerHTML='';
+  HATS.forEach(h=>{const own=h.p===0||c.owned.includes(h.id),b=el('button','btn'+(c.hat===h.id?' pri':''),h.ic+(own?'':' '+h.p));
+    b.disabled=!own&&S.coins<h.p;
+    b.onclick=()=>{if(!own){earn(-h.p);c.owned.push(h.id);}c.hat=h.id;save();anim('cg','hop');say('hat');render();};H.append(b);});
+  $('#cprop').style.display=selP&&S.scene.some(p=>p.id===selP)?'':'none';
+}
+/* bảng vẽ dùng chung */
+const COLS=['#e53935','#fb8c00','#fdd835','#43a047','#1e88e5','#8e24aa','#6d4c41','#111111','#ffffff'];
+function makePad(cv,host){
+  const ctx=cv.getContext('2d'),st={color:'#e53935',size:5,erase:false};let down=false,lx=0,ly=0;
+  const k=()=>cv.width/cv.getBoundingClientRect().width;
+  const pos=e=>{const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height];};
+  const style=()=>{ctx.globalCompositeOperation=st.erase?'destination-out':'source-over';ctx.strokeStyle=st.color;ctx.fillStyle=st.color;ctx.lineWidth=st.size*k();ctx.lineCap='round';ctx.lineJoin='round';};
+  cv.onpointerdown=e=>{down=true;[lx,ly]=pos(e);cv.setPointerCapture(e.pointerId);style();ctx.beginPath();ctx.arc(lx,ly,st.size*k()/2,0,7);ctx.fill();};
+  cv.onpointermove=e=>{if(!down)return;const [x,y]=pos(e);style();ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();lx=x;ly=y;};
+  cv.onpointerup=cv.onpointercancel=()=>{down=false;};
+  const tb=()=>{host.innerHTML='';
+    COLS.forEach(c=>{const b=el('button','c'+(!st.erase&&st.color===c?' on':''));b.style.background=c;b.setAttribute('aria-label',c);b.onclick=()=>{st.color=c;st.erase=false;tb();};host.append(b);});
+    const ci=document.createElement('input');ci.type='color';ci.value=st.color;ci.style.cssText='width:34px;height:30px;padding:0;border:0;background:none';ci.oninput=()=>{st.color=ci.value;st.erase=false;};host.append(ci);
+    [3,6,12].forEach(z=>{const b=el('button','btn'+(st.size===z?' pri':''),'●');b.style.fontSize=(10+z)+'px';b.onclick=()=>{st.size=z;tb();};host.append(b);});
+    const er=el('button','btn'+(st.erase?' pri':''),'⌫');er.onclick=()=>{st.erase=!st.erase;tb();};host.append(er);
+    const cl=el('button','btn','🗑');cl.onclick=()=>ctx.clearRect(0,0,cv.width,cv.height);host.append(cl);};
+  tb();return {ctx};
+}
+const P1=makePad($('#cpad'),$('#ctl')),P2=makePad($('#ipad'),$('#itl'));
+/* vẽ lên nhân vật */
+function startPaint(){
+  drawing=true;$('#ovc').classList.add('drawing');$('#cmain').style.display='none';$('#cdraw').style.display='';
+  const cv=$('#cpad'),ctx=P1.ctx;ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,cv.width,cv.height);
+  if(S.char.paint){const im=new Image();im.onload=()=>ctx.drawImage(im,0,0,cv.width,cv.height);im.src=S.char.paint;}
+  drawChar();
+}
+function endPaint(ok){
+  if(ok){S.char.paint=$('#cpad').toDataURL('image/png');save();say('art');}
+  drawing=false;$('#ovc').classList.remove('drawing');$('#cmain').style.display='';$('#cdraw').style.display='none';drawChar();
+}
+$('#bpaint').onclick=startPaint;$('#pok').onclick=()=>endPaint(true);$('#pcan').onclick=()=>endPaint(false);
+/* vật dụng và ảnh trong khu vực đứng */
+function cropCanvas(cv){
+  const w=cv.width,h=cv.height,d=cv.getContext('2d').getImageData(0,0,w,h).data;let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>8){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  if(x1<0)return null;
+  const o=document.createElement('canvas');o.width=x1-x0+1;o.height=y1-y0+1;o.getContext('2d').drawImage(cv,x0,y0,o.width,o.height,0,0,o.width,o.height);return o;
+}
+function addProp(src,w){
+  if(S.scene.length>=15){toast(tr('sceneFull'));return;}
+  const id=uid();S.scene.push({id,src,x:.2+Math.random()*.6,y:.45+Math.random()*.3,w});selP=id;save();renderProps();drawChar();say('art');
+}
+function renderProps(){
+  const H=$('#props');H.innerHTML='';
+  S.scene.forEach(p=>{
+    const im=document.createElement('img');im.src=p.src;im.draggable=false;im.className='prop'+(p.id===selP?' sel':'');
+    im.style.left=p.x*100+'%';im.style.top=p.y*100+'%';im.style.width=p.w+'px';
+    im.onpointerdown=e=>{
+      e.preventDefault();selP=p.id;const r=$('#stage').getBoundingClientRect();im.setPointerCapture(e.pointerId);
+      im.onpointermove=v=>{p.x=Math.max(0,Math.min(1,(v.clientX-r.left)/r.width));p.y=Math.max(0,Math.min(1,(v.clientY-r.top)/r.height));im.style.left=p.x*100+'%';im.style.top=p.y*100+'%';};
+      im.onpointerup=()=>{im.onpointermove=im.onpointerup=null;save();renderProps();drawChar();};
+    };
+    H.append(im);
+  });
+}
+$('#stage').onpointerdown=e=>{if(e.target.id==='stage'||e.target.id==='props'){selP=0;renderProps();drawChar();}};
+$('#pp').onclick=()=>{const p=S.scene.find(x=>x.id===selP);if(p){p.w=Math.min(300,Math.round(p.w*1.2));save();renderProps();}};
+$('#pm').onclick=()=>{const p=S.scene.find(x=>x.id===selP);if(p){p.w=Math.max(30,Math.round(p.w/1.2));save();renderProps();}};
+$('#pdel').onclick=()=>{S.scene=S.scene.filter(x=>x.id!==selP);selP=0;save();renderProps();drawChar();};
+$('#bitem').onclick=()=>{P2.ctx.globalCompositeOperation='source-over';P2.ctx.clearRect(0,0,300,300);$('#ovi').classList.add('on');};
+$('#iok').onclick=()=>{const o=cropCanvas($('#ipad'));if(!o){toast(tr('emptyDraw'));return;}$('#ovi').classList.remove('on');addProp(o.toDataURL('image/png'),Math.max(40,Math.min(130,o.width*.45)));};
+$('#clsi').onclick=()=>$('#ovi').classList.remove('on');
+$('#ovi').onclick=e=>{if(e.target.id==='ovi')$('#ovi').classList.remove('on');};
+$('#bphoto').onclick=()=>$('#cfile').click();
+$('#cfile').onchange=e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  const im=new Image(),u=URL.createObjectURL(f);
+  im.onload=()=>{const m=Math.min(1,240/Math.max(im.width,im.height)),o=document.createElement('canvas');o.width=Math.round(im.width*m);o.height=Math.round(im.height*m);o.getContext('2d').drawImage(im,0,0,o.width,o.height);URL.revokeObjectURL(u);addProp(o.toDataURL('image/jpeg',.8),100);};
+  im.src=u;
+};
+/* mở / đóng màn hình nhân vật */
+$('#cbtn').onclick=()=>{drawChar();renderProps();const st=charState();say(st.full<25?'hungry':st.mood>=70?'happy':st.mood>=40?'ok':'sad',st.n?' ('+st.d+'/'+st.n+')':'');$('#ovc').classList.add('on');};
+$('#clsc').onclick=()=>{if(drawing)endPaint(false);$('#ovc').classList.remove('on');};
+$('#cn').oninput=e=>{S.char.name=e.target.value;save();};
+$('#chead').onclick=()=>{anim('chead','shake');talk();say('poke');};
+$('#cbody').onclick=()=>{anim('cg','squish');talk();say('tickle');};
 applySet();render();
 </script>
 </body>
